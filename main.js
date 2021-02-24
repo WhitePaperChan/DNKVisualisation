@@ -3,8 +3,8 @@ let oneVectorLength = 3;
 const canvas = document.querySelector('canvas');
 const ctx = canvas.getContext('2d');
 
-let width = canvas.width = window.innerWidth;
-let height = canvas.height = window.innerHeight;
+let width = canvas.width = 800;
+let height = canvas.height = 600;
 
 let input = document.querySelector('input');
 
@@ -14,8 +14,7 @@ input.addEventListener("input", redraw)
 //DNK = input.value;
 
 function redraw(){
-    DNK = "";
-    //let DNK = input.value;
+    let DNK = input.value;
     if (DNK.length > 10000){
         return;
     }
