@@ -15,9 +15,6 @@ input.addEventListener("input", redraw)
 
 function redraw(){
     let DNK = input.value;
-    if (DNK.length > 10000){
-        return;
-    }
     DNK = DNK.toUpperCase();
     ctx.fillStyle = 'lightgray';
     ctx.fillRect(0, 0, width, height);
