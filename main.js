@@ -11,6 +11,15 @@ let input = document.querySelector('input');
 let button = document.querySelector('button');
 input.addEventListener("input", redraw)
 
+let checkbox = document.querySelector('input[id="triander"]')
+checkbox.addEventListener('change', () => {
+    if (checkbox.checked){
+        redraw();
+    } else {
+        redrawMonoander();
+    }
+})
+
 function redraw(){
     let DNK = input.value;
     DNK = DNK.toUpperCase();
@@ -79,6 +88,7 @@ function redrawMonoander(){
 
     x = width / 4
     y = 9 * height / 10
+    ctx.strokeStyle = "black";
     ctx.beginPath();
     ctx.moveTo(x, y);
 
@@ -100,7 +110,11 @@ function redrawMonoander(){
     ctx.stroke();
 }
 
-redraw();
+if (checkbox.checked){
+    redraw();
+} else {
+    redrawMonoander();
+}
 
 console.log(canvas.width);
 console.log(canvas.height);
