@@ -14,45 +14,47 @@ let button = document.querySelector('button');
 let checkbox = document.querySelector('input[id="triander"]')
 checkbox.addEventListener('change', () => {
     if (checkbox.checked){
-        redraw();
+        redrawTriander();
     } else {
         redrawMonoander();
     }
 })
+
 input.addEventListener("input", () => {
     if (checkbox.checked){
-        redraw();
+        redrawTriander();
     } else {
         redrawMonoander();
     }
 })
-function redraw(){
+
+function drawDNK(dnk, coords){
+    ctx.beginPath();
+    ctx.moveTo(coords.x, coords.y);
+
+    dnk.forEach(function(i){
+        if (i == "C"){
+            coords.y -= oneVectorLength * 4;
+        } else if (i == "T"){
+            coords.x += oneVectorLength * 2;
+        } else if (i == "U"){
+            coords.x += oneVectorLength * 2;
+        } else if (i == "G"){
+            coords.y += oneVectorLength * 3;
+        } else if (i == "A"){
+            coords.x -= oneVectorLength * 1;
+        }
+        ctx.lineTo(coords.x, coords.y);
+    });
+    ctx.stroke();
+    ctx.closePath();
+}
+
+function redrawTriander(){
     let DNK = input.value;
     DNK = DNK.toUpperCase();
     ctx.fillStyle = 'lightgray';
     ctx.fillRect(0, 0, width, height);
-
-    function drawDNK(dnk, coords){
-        ctx.beginPath();
-        ctx.moveTo(coords.x, coords.y);
-    
-        dnk.forEach(function(i){
-            if (i == "C"){
-                coords.y -= oneVectorLength * 4;
-            } else if (i == "T"){
-                coords.x += oneVectorLength * 2;
-            } else if (i == "U"){
-                coords.x += oneVectorLength * 2;
-            } else if (i == "G"){
-                coords.y += oneVectorLength * 3;
-            } else if (i == "A"){
-                coords.x -= oneVectorLength * 1;
-            }
-            ctx.lineTo(coords.x, coords.y);
-        });
-        ctx.stroke();
-        ctx.closePath();
-    }
 
     DNK = DNK.split('');
 
@@ -92,32 +94,13 @@ function redrawMonoander(){
 
     DNK = DNK.split('');
 
-    x = width / 4
-    y = 9 * height / 10
+    coords = {x: width / 4, y: 9 * height / 10}
     ctx.strokeStyle = "black";
-    ctx.beginPath();
-    ctx.moveTo(x, y);
-
-    DNK.forEach(function(i){
-        if (i == "C"){
-            y -= oneVectorLength * 4;
-        } else if (i == "T"){
-            x += oneVectorLength * 2;
-        } else if (i == "U"){
-            x += oneVectorLength * 2;
-        } else if (i == "G"){
-            y += oneVectorLength * 3;
-        } else if (i == "A"){
-            x -= oneVectorLength * 1;
-        }
-        ctx.lineTo(x, y);
-    });
-
-    ctx.stroke();
+    drawDNK(DNK, coords);
 }
 
 if (checkbox.checked){
-    redraw();
+    redrawTriander();
 } else {
     redrawMonoander();
 }
