@@ -9,7 +9,7 @@ let height = canvas.height = 600;
 let input = document.querySelector('input');
 
 let button = document.querySelector('button');
-input.addEventListener("input", redraw)
+
 
 let checkbox = document.querySelector('input[id="triander"]')
 checkbox.addEventListener('change', () => {
@@ -19,7 +19,13 @@ checkbox.addEventListener('change', () => {
         redrawMonoander();
     }
 })
-
+input.addEventListener("input", () => {
+    if (checkbox.checked){
+        redraw();
+    } else {
+        redrawMonoander();
+    }
+})
 function redraw(){
     let DNK = input.value;
     DNK = DNK.toUpperCase();
