@@ -10,8 +10,13 @@ let input = document.querySelector('input');
 
 let button = document.querySelector('button');
 
+let lengthC = 4;
+let lengthTU = 2;
+let lengthG = 3;
+let lengthA = 1;
 
 let checkbox = document.querySelector('input[id="triander"]')
+let zoomNumberInput = document.querySelector('input[id="zoom"]')
 checkbox.addEventListener('change', () => {
     if (checkbox.checked){
         redrawTriander();
@@ -28,21 +33,34 @@ input.addEventListener("input", () => {
     }
 })
 
+zoomNumberInput.addEventListener("input", () => {
+    let value = zoomNumberInput.value;
+    if (value == ""){
+        console.log("There are no text...");
+    } else {
+        oneVectorLength = parseInt(value);
+        if (checkbox.checked){
+            redrawTriander();
+        } else {
+            redrawMonoander();
+        }
+        console.log(parseInt(value));
+    }
+})
+
 function drawDNK(dnk, coords){
     ctx.beginPath();
     ctx.moveTo(coords.x, coords.y);
 
     dnk.forEach(function(i){
         if (i == "C"){
-            coords.y -= oneVectorLength * 4;
-        } else if (i == "T"){
-            coords.x += oneVectorLength * 2;
-        } else if (i == "U"){
-            coords.x += oneVectorLength * 2;
+            coords.y -= oneVectorLength * lengthC;
+        } else if (i == "T" || i == "U"){
+            coords.x += oneVectorLength * lengthTU;
         } else if (i == "G"){
-            coords.y += oneVectorLength * 3;
+            coords.y += oneVectorLength * lengthG;
         } else if (i == "A"){
-            coords.x -= oneVectorLength * 1;
+            coords.x -= oneVectorLength * lengthA;
         }
         ctx.lineTo(coords.x, coords.y);
     });
