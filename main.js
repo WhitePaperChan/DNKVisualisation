@@ -8,15 +8,19 @@ let height = canvas.height = 600;
 
 let input = document.querySelector('input');
 
-let button = document.querySelector('button');
-
 let lengthC = 4;
 let lengthTU = 2;
 let lengthG = 3;
 let lengthA = 1;
 
-let checkbox = document.querySelector('input[id="triander"]')
-let zoomNumberInput = document.querySelector('input[id="zoom"]')
+let x = 0; 
+let y = height;
+
+let checkbox = document.querySelector('input[id="triander"]');
+let zoomNumberInput = document.querySelector('input[id="zoom"]');
+let xNumberInput = document.querySelector('input[id="x"]');
+let yNumberInput = document.querySelector('input[id="y"]');
+
 checkbox.addEventListener('change', () => {
     if (checkbox.checked){
         redrawTriander();
@@ -34,17 +38,26 @@ input.addEventListener("input", () => {
 })
 
 zoomNumberInput.addEventListener("input", () => {
-    let value = zoomNumberInput.value;
-    if (value == ""){
-        console.log("There are no text...");
+    if (checkbox.checked){
+        redrawTriander();
     } else {
-        oneVectorLength = parseInt(value);
-        if (checkbox.checked){
-            redrawTriander();
-        } else {
-            redrawMonoander();
-        }
-        console.log(parseInt(value));
+        redrawMonoander();
+    }
+})
+
+xNumberInput.addEventListener("input", () => {
+    if (checkbox.checked){
+        redrawTriander();
+    } else {
+        redrawMonoander();
+    }
+})
+
+yNumberInput.addEventListener("input", () => {
+    if (checkbox.checked){
+        redrawTriander();
+    } else {
+        redrawMonoander();
     }
 })
 
@@ -71,6 +84,20 @@ function drawDNK(dnk, coords){
 function redrawTriander(){
     let DNK = input.value;
     DNK = DNK.toUpperCase();
+
+    if (zoomNumberInput.value != ""){
+        oneVectorLength = parseInt(zoomNumberInput.value);
+    }
+
+    if (xNumberInput.value != ""){
+        x = -parseInt(xNumberInput.value) * oneVectorLength;
+    }
+
+    if (yNumberInput.value != ""){
+        y = height - parseInt(yNumberInput.value) * oneVectorLength;
+    }
+
+
     ctx.fillStyle = 'lightgray';
     ctx.fillRect(0, 0, width, height);
 
@@ -91,7 +118,7 @@ function redrawTriander(){
         }
     }
 
-    var coords1 = {x: width / 4, y: 9 * height / 10};
+    var coords1 = {x: x, y: y};
     var coords2 = {x: coords1.x, y: coords1.y};
     var coords3 = {x: coords1.x, y: coords1.y};
 
@@ -112,7 +139,7 @@ function redrawMonoander(){
 
     DNK = DNK.split('');
 
-    coords = {x: width / 4, y: 9 * height / 10}
+    coords = {x: x, y: y}
     ctx.strokeStyle = "black";
     drawDNK(DNK, coords);
 }
