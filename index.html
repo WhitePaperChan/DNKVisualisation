@@ -8,12 +8,69 @@
     <input type="text" maxlength=100000>
     <input type="checkbox" id="triander" name="triander">
     <label for="triander">Triander</label>
-    <input type="number" id="zoom" name="zoom" min="10" max="100" maxlength=3>
-    <label for="triander">Zoom</label>
-    <input type="number" id="x" name="x" min="-1000" max="1000" maxlength=3>
-    <label for="triander">x</label>
-    <input type="number" id="y" name="y" min="-1000" max="1000" maxlength=3>
-    <label for="triander">y</label>
+    <br>
+    <label for="zoom">Zoom</label>
+    <input type="number" id="zoom" name="zoom" min="10" max="100">
+    <br>
+    <label for="x">x</label>
+    <input type="number" id="x" name="x" min="-1000" max="1000">
+    <label for="y">y</label>
+    <input type="number" id="y" name="y" min="-1000" max="1000">
+    <br>
+    <label for="lengthC">C</label>
+    <input type="number" id="lengthC" name="lengthC" min="1" max="10">
+    <label for="lengthTU">T/U</label>
+    <input type="number" id="lengthTU" name="lengthTU" min="1" max="10">
+    <label for="lengthG">G</label>
+    <input type="number" id="lengthG" name="lengthG" min="1" max="10">
+    <label for="lengthA">A</label>
+    <input type="number" id="lengthA" name="lengthA" min="1" max="10">
+    <input type="button" id="defaultButton" value="Default">
+    <br>
+    C:
+    <input type="radio" id="directionC1" name="directionC" value="right">
+    <label for="directionC1">➔</label>
+    <input type="radio" id="directionC2" name="directionC" value="left">
+    <label for="directionC2">🠔</label>
+    <input type="radio" id="directionC3" name="directionC" value="up" checked>
+    <label for="directionC3">🠕</label>
+    <input type="radio" id="directionC4" name="directionC" value="down">
+    <label for="directionC4">🠗</label>
+    <br>
+    T/U:
+    <input type="radio" id="directionTU1" name="directionTU" value="right" checked>
+    <label for="directionTU1">➔</label>
+    <input type="radio" id="directionTU2" name="directionTU" value="left">
+    <label for="directionTU2">🠔</label>
+    <input type="radio" id="directionTU3" name="directionTU" value="up">
+    <label for="directionTU3">🠕</label>
+    <input type="radio" id="directionTU4" name="directionTU" value="down">
+    <label for="directionTU4">🠗</label>
+    <br>
+    G:
+    <input type="radio" id="directionG1" name="directionG" value="right">
+    <label for="directionG1">➔</label>
+    <input type="radio" id="directionG2" name="directionG" value="left">
+    <label for="directionG2">🠔</label>
+    <input type="radio" id="directionG3" name="directionG" value="up">
+    <label for="directionG3">🠕</label>
+    <input type="radio" id="directionG4" name="directionG" value="down" checked>
+    <label for="directionG4">🠗</label>
+    <br>
+    A:
+    <input type="radio" id="directionA1" name="directionA" value="right">
+    <label for="directionA1">➔</label>
+    <input type="radio" id="directionA2" name="directionA" value="left" checked>
+    <label for="directionA2">🠔</label>
+    <input type="radio" id="directionA3" name="directionA" value="up">
+    <label for="directionA3">🠕</label>
+    <input type="radio" id="directionA4" name="directionA" value="down">
+    <label for="directionA4">🠗</label>
+    <br>
+    Start:
+    <input type="number" id="start" name="start" min="1" max="100000">
+    End:
+    <input type="number" id="end" name="end" min="1" max="100000">
     <br>
     <canvas></canvas>
     <script src="main.js"></script>

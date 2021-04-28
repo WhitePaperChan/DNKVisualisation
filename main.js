@@ -13,53 +13,112 @@ let lengthTU = 2;
 let lengthG = 3;
 let lengthA = 1;
 
+let dirC = "up";
+let dirTU = "right";
+let dirG = "down";
+let dirA = "left";
+
 let x = 0; 
 let y = height;
 
+let start = 1;
+let end = 100000;
+
 let checkbox = document.querySelector('input[id="triander"]');
+
 let zoomNumberInput = document.querySelector('input[id="zoom"]');
 let xNumberInput = document.querySelector('input[id="x"]');
 let yNumberInput = document.querySelector('input[id="y"]');
 
-checkbox.addEventListener('change', () => {
-    if (checkbox.checked){
-        redrawTriander();
-    } else {
-        redrawMonoander();
-    }
-})
+let lengthCInput = document.querySelector('input[id="lengthC"]');
+let lengthTUInput = document.querySelector('input[id="lengthTU"]');
+let lengthGInput = document.querySelector('input[id="lengthG"]');
+let lengthAInput = document.querySelector('input[id="lengthA"]');
 
-input.addEventListener("input", () => {
-    if (checkbox.checked){
-        redrawTriander();
-    } else {
-        redrawMonoander();
-    }
-})
+let dirCRadio = document.querySelectorAll('input[name="directionC"]');
+let dirTURadio = document.querySelectorAll('input[name="directionTU"]');
+let dirGRadio = document.querySelectorAll('input[name="directionG"]');
+let dirARadio = document.querySelectorAll('input[name="directionA"]');
 
-zoomNumberInput.addEventListener("input", () => {
-    if (checkbox.checked){
-        redrawTriander();
-    } else {
-        redrawMonoander();
-    }
-})
+let defaultButton = document.querySelector('input[id="defaultButton"]');
 
-xNumberInput.addEventListener("input", () => {
-    if (checkbox.checked){
-        redrawTriander();
-    } else {
-        redrawMonoander();
-    }
-})
+let startInput = document.querySelector('input[id="start"]');
+let endInput = document.querySelector('input[id="end"]');
 
-yNumberInput.addEventListener("input", () => {
+function defaultParams(){
+    lengthCInput.value = 4;
+    lengthTUInput.value = 2;
+    lengthGInput.value = 3;
+    lengthAInput.value = 1;
+    dirCRadio.forEach(i => {if (i.value == "up"){i.checked = true;} else {i.checked = false;}})
+    dirTURadio.forEach(i => {if (i.value == "right"){i.checked = true;} else {i.checked = false;}})
+    dirGRadio.forEach(i => {if (i.value == "down"){i.checked = true;} else {i.checked = false;}})
+    dirARadio.forEach(i => {if (i.value == "left"){i.checked = true;} else {i.checked = false;}})
+    redraw();
+}
+
+function redraw(){
+    if (zoomNumberInput.value != ""){
+        oneVectorLength = parseInt(zoomNumberInput.value);
+    }
+    if (xNumberInput.value != ""){
+        x = -parseInt(xNumberInput.value) * oneVectorLength;
+    }
+    if (yNumberInput.value != ""){
+        y = height - parseInt(yNumberInput.value) * oneVectorLength;
+    }
+    if (lengthCInput.value != ""){
+        lengthC = parseInt(lengthCInput.value);
+    }
+    if (lengthTUInput.value != ""){
+        lengthTU = parseInt(lengthTUInput.value);
+    }
+    if (lengthGInput.value != ""){
+        lengthG = parseInt(lengthGInput.value);
+    }
+    if (lengthAInput.value != ""){
+        lengthA = parseInt(lengthAInput.value);
+    }
+    dirCRadio.forEach(i => {if (i.checked){dirC = i.value}})
+    dirTURadio.forEach(i => {if (i.checked){dirTU = i.value}})
+    dirGRadio.forEach(i => {if (i.checked){dirG = i.value}})
+    dirARadio.forEach(i => {if (i.checked){dirA = i.value}})
+    if (startInput.value != ""){
+        start = parseInt(startInput.value);
+    }
+    if (endInput.value != ""){
+        end = parseInt(endInput.value);
+    }
+    console.log(start, end);
     if (checkbox.checked){
         redrawTriander();
     } else {
         redrawMonoander();
     }
-})
+}
+
+[zoomNumberInput, xNumberInput, yNumberInput, 
+    lengthCInput, lengthTUInput, lengthGInput, lengthAInput, startInput, endInput].forEach(i => i.addEventListener("input", redraw));
+checkbox.addEventListener('change', redraw);
+input.addEventListener("input", redraw);
+defaultButton.addEventListener("click", defaultParams);
+
+dirCRadio.forEach(i => i.addEventListener("click", redraw));
+dirTURadio.forEach(i => i.addEventListener("click", redraw));
+dirGRadio.forEach(i => i.addEventListener("click", redraw));
+dirARadio.forEach(i => i.addEventListener("click", redraw));
+
+function processLetter(direction, length, coords){
+    if (direction == "up"){
+        coords.y -= oneVectorLength * length;
+    } else if (direction == "right"){
+        coords.x += oneVectorLength * length;
+    } else if (direction == "down"){
+        coords.y += oneVectorLength * length;
+    } else if (direction == "left"){
+        coords.x -= oneVectorLength * length;
+    }
+}
 
 function drawDNK(dnk, coords){
     ctx.beginPath();
@@ -67,13 +126,13 @@ function drawDNK(dnk, coords){
 
     dnk.forEach(function(i){
         if (i == "C"){
-            coords.y -= oneVectorLength * lengthC;
+            processLetter(dirC, lengthC, coords);
         } else if (i == "T" || i == "U"){
-            coords.x += oneVectorLength * lengthTU;
+            processLetter(dirTU, lengthTU, coords);
         } else if (i == "G"){
-            coords.y += oneVectorLength * lengthG;
+            processLetter(dirG, lengthG, coords);
         } else if (i == "A"){
-            coords.x -= oneVectorLength * lengthA;
+            processLetter(dirA, lengthA, coords);
         }
         ctx.lineTo(coords.x, coords.y);
     });
@@ -85,22 +144,10 @@ function redrawTriander(){
     let DNK = input.value;
     DNK = DNK.toUpperCase();
 
-    if (zoomNumberInput.value != ""){
-        oneVectorLength = parseInt(zoomNumberInput.value);
-    }
-
-    if (xNumberInput.value != ""){
-        x = -parseInt(xNumberInput.value) * oneVectorLength;
-    }
-
-    if (yNumberInput.value != ""){
-        y = height - parseInt(yNumberInput.value) * oneVectorLength;
-    }
-
-
     ctx.fillStyle = 'lightgray';
     ctx.fillRect(0, 0, width, height);
 
+    DNK = DNK.slice(start - 1, end)
     DNK = DNK.split('');
 
     let DNK1 = [];
@@ -137,6 +184,7 @@ function redrawMonoander(){
     ctx.fillStyle = 'lightgray';
     ctx.fillRect(0, 0, width, height);
 
+    DNK = DNK.slice(start - 1, end)
     DNK = DNK.split('');
 
     coords = {x: x, y: y}
@@ -144,11 +192,4 @@ function redrawMonoander(){
     drawDNK(DNK, coords);
 }
 
-if (checkbox.checked){
-    redrawTriander();
-} else {
-    redrawMonoander();
-}
-
-console.log(canvas.width);
-console.log(canvas.height);
+redraw();
