@@ -24,7 +24,8 @@ let y = height;
 let start = 1;
 let end = 100000;
 
-let checkbox = document.querySelector('input[id="triander"]');
+let checkboxTriander = document.querySelector('input[id="triander"]');
+let checkboxColors = document.querySelector('input[id="colors"]');
 
 let zoomNumberInput = document.querySelector('input[id="zoom"]');
 let xNumberInput = document.querySelector('input[id="x"]');
@@ -118,7 +119,7 @@ function redraw(){
     if (endInput.value != ""){
         end = parseInt(endInput.value);
     }
-    if (checkbox.checked){
+    if (checkboxTriander.checked){
         redrawTriander();
     } else {
         redrawMonoander();
@@ -127,7 +128,8 @@ function redraw(){
 
 [zoomNumberInput, xNumberInput, yNumberInput, 
     lengthCInput, lengthTUInput, lengthGInput, lengthAInput, startInput, endInput].forEach(i => i.addEventListener("input", redraw));
-checkbox.addEventListener('change', redraw);
+checkboxTriander.addEventListener('change', redraw);
+checkboxColors.addEventListener('change', redraw);
 input.addEventListener("input", redraw);
 defaultButton.addEventListener("click", defaultParams);
 
@@ -189,6 +191,29 @@ function processLetter(direction, length, coords){
     }
 }
 
+function drawDNKdifferentColors(dnk, coords, colors){
+    dnk.forEach(function(i){
+        ctx.beginPath();
+        ctx.moveTo(coords.x, coords.y);
+        if (i == "C"){
+            ctx.strokeStyle = colors[0];
+            processLetter(dirC, lengthC, coords);
+        } else if (i == "T" || i == "U"){
+            ctx.strokeStyle = colors[1];
+            processLetter(dirTU, lengthTU, coords);
+        } else if (i == "G"){
+            ctx.strokeStyle = colors[2];
+            processLetter(dirG, lengthG, coords);
+        } else if (i == "A"){
+            ctx.strokeStyle = colors[3];
+            processLetter(dirA, lengthA, coords);
+        }
+        ctx.lineTo(coords.x, coords.y);
+        ctx.stroke();
+        ctx.closePath();
+    });
+}
+
 function drawDNK(dnk, coords){
     ctx.beginPath();
     ctx.moveTo(coords.x, coords.y);
@@ -238,12 +263,18 @@ function redrawTriander(){
     var coords2 = {x: coords1.x, y: coords1.y};
     var coords3 = {x: coords1.x, y: coords1.y};
 
-    ctx.strokeStyle = "blue";
-    drawDNK(DNK1, coords1);
-    ctx.strokeStyle = "green";
-    drawDNK(DNK2, coords2);
-    ctx.strokeStyle = "red";
-    drawDNK(DNK3, coords3);
+    if (checkboxColors.checked){
+        drawDNKdifferentColors(DNK1, coords1, ["purple", "blue", "green", "orange"])
+        drawDNKdifferentColors(DNK2, coords2, ["magenta", "deepskyblue", "springgreen", "orangered"])
+        drawDNKdifferentColors(DNK3, coords3, ["darkorchid", "navy", "lime", "red"])
+    } else {
+        ctx.strokeStyle = "blue";
+        drawDNK(DNK1, coords1);
+        ctx.strokeStyle = "green";
+        drawDNK(DNK2, coords2);
+        ctx.strokeStyle = "red";
+        drawDNK(DNK3, coords3);
+    }
 
 }
 
@@ -258,7 +289,11 @@ function redrawMonoander(){
 
     coords = {x: x, y: y}
     ctx.strokeStyle = "black";
-    drawDNK(DNK, coords);
+    if (checkboxColors.checked){
+        drawDNKdifferentColors(DNK, coords, ["purple", "blue", "green", "orange"]);
+    } else {
+        drawDNK(DNK, coords);
+    }
 }
 
 redraw();
