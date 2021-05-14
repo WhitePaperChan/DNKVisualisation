@@ -1,0 +1,7 @@
+input:invalid {
+  border:solid red;
+}
+
+span[id^="warning"]{
+  color: red;
+}

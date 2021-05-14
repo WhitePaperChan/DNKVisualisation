@@ -40,10 +40,18 @@ let dirTURadio = document.querySelectorAll('input[name="directionTU"]');
 let dirGRadio = document.querySelectorAll('input[name="directionG"]');
 let dirARadio = document.querySelectorAll('input[name="directionA"]');
 
+let dirCLabels = document.querySelectorAll('label[for^="directionC"]');
+let dirTULabels = document.querySelectorAll('label[for^="directionTU"]');
+let dirGLabels = document.querySelectorAll('label[for^="directionG"]');
+let dirALabels = document.querySelectorAll('label[for^="directionA"]');
+
 let defaultButton = document.querySelector('input[id="defaultButton"]');
 
 let startInput = document.querySelector('input[id="start"]');
 let endInput = document.querySelector('input[id="end"]');
+
+let warningSizeText = document.getElementById('warningSize');
+let warningLettersText = document.getElementById('warningLetters');
 
 function defaultParams(){
     lengthCInput.value = 4;
@@ -55,9 +63,30 @@ function defaultParams(){
     dirGRadio.forEach(i => {if (i.value == "down"){i.checked = true;} else {i.checked = false;}})
     dirARadio.forEach(i => {if (i.value == "left"){i.checked = true;} else {i.checked = false;}})
     redraw();
+    checkSameLetters();
 }
 
 function redraw(){
+    let invalidInput = false;
+    let invalidInputsList = "";
+    [[zoomNumberInput, "zoom"], [xNumberInput, "x"], [yNumberInput, "y"], 
+    [lengthCInput, "C"], [lengthTUInput, "T/U"], [lengthGInput, "G"], [lengthAInput, "A"], 
+    [startInput, "start"], [endInput, "end"]].forEach(
+            i => {
+                if (!i[0].validity.valid){
+                    invalidInput = true; 
+                    if (invalidInputsList != "") {
+                        invalidInputsList += ", "
+                    }
+                    invalidInputsList += i[1]
+                }
+            }
+        );
+    if (invalidInput){
+        warningSizeText.textContent = "Invalid value of " + invalidInputsList + "!";
+    } else {
+        warningSizeText.textContent = "";
+    }
     if (zoomNumberInput.value != ""){
         oneVectorLength = parseInt(zoomNumberInput.value);
     }
@@ -89,7 +118,6 @@ function redraw(){
     if (endInput.value != ""){
         end = parseInt(endInput.value);
     }
-    console.log(start, end);
     if (checkbox.checked){
         redrawTriander();
     } else {
@@ -103,10 +131,51 @@ checkbox.addEventListener('change', redraw);
 input.addEventListener("input", redraw);
 defaultButton.addEventListener("click", defaultParams);
 
-dirCRadio.forEach(i => i.addEventListener("click", redraw));
-dirTURadio.forEach(i => i.addEventListener("click", redraw));
-dirGRadio.forEach(i => i.addEventListener("click", redraw));
-dirARadio.forEach(i => i.addEventListener("click", redraw));
+dirCRadio.forEach(i => i.addEventListener("click", () => {redraw(); checkSameLetters()}));
+dirTURadio.forEach(i => i.addEventListener("click", () => {redraw(); checkSameLetters()}));
+dirGRadio.forEach(i => i.addEventListener("click", () => {redraw(); checkSameLetters()}));
+dirARadio.forEach(i => i.addEventListener("click", () => {redraw(); checkSameLetters()}));
+
+function checkSameLetters(){
+    var labels = [dirCLabels, dirTULabels, dirGLabels, dirALabels];
+    var dirs = [dirC, dirTU, dirG, dirA];
+    var letters = ["C", "T/U", "G", "A"]
+    var hasSameLetters = false;
+    var sameLetters = "";
+    labels.forEach(i => i.forEach(j => j.style.color = "black"));
+    for (let i = 0; i < 4; i++){
+        for (let j = i+1; j < 4; j++){
+            if (dirs[i] == dirs[j]){
+                hasSameLetters = true;
+                if (sameLetters != ""){
+                    sameLetters += ", ";
+                }
+                sameLetters += letters[i] + " and " + letters[j];
+                if (dirs[i] == "right"){
+                    labels[i][0].style.color = "red";
+                    labels[j][0].style.color = "red";
+                }
+                if (dirs[i] == "left"){
+                    labels[i][1].style.color = "red";
+                    labels[j][1].style.color = "red";
+                }
+                if (dirs[i] == "up"){
+                    labels[i][2].style.color = "red";
+                    labels[j][2].style.color = "red";
+                }
+                if (dirs[i] == "down"){
+                    labels[i][3].style.color = "red";
+                    labels[j][3].style.color = "red";
+                }
+            }
+            if (hasSameLetters){
+                warningLettersText.textContent = "Some letters (" + sameLetters + ") have the same direction!";
+            } else {
+                warningLettersText.textContent = "";
+            }
+        }
+    }
+}
 
 function processLetter(direction, length, coords){
     if (direction == "up"){
@@ -193,3 +262,4 @@ function redrawMonoander(){
 }
 
 redraw();
+checkSameLetters();
