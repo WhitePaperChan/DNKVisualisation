@@ -24,6 +24,28 @@ let y = height;
 let start = 1;
 let end = 100000;
 
+let importInput = document.getElementById('import');
+
+importInput.addEventListener("change", () => {
+    let file = document.getElementById('import').files[0];
+    let reader = new FileReader();
+    reader.readAsText(file);
+    reader.onload = function() {
+        read_result = reader.result;
+        if (read_result.length < 100000){
+            input.value = read_result;
+        } else {
+            input.value = read_result.slice(0, 100000);
+        }
+        redraw()
+        console.log(read_result);
+    };
+    
+    reader.onerror = function() {
+        console.log(reader.error);
+    };
+});
+
 let checkboxTriander = document.querySelector('input[id="triander"]');
 let checkboxColors = document.querySelector('input[id="colors"]');
 

@@ -5,3 +5,31 @@ input:invalid {
 span[id^="warning"]{
   color: red;
 }
+input[type="file"] {
+  display: none;
+}
+.import_button {
+  background-color: lightgray;
+  border: 1px solid gray;
+  display: inline-block;
+  padding: 3px 12px;
+  cursor: pointer;
+  font-family: inherit;
+}
+.import_button:hover {
+  background-color: lightsteelblue;
+  border: 1px solid blue;
+}
+input[type="button"] {
+  background-color: lightgray;
+  border: 1px solid gray;
+  display: inline-block;
+  padding: 3px 12px;
+  cursor: pointer;
+  font-size: inherit;
+  font-family: inherit;
+}
+input[type="button"]:hover {
+  background-color: lightsteelblue;
+  border: 1px solid blue;
+}
