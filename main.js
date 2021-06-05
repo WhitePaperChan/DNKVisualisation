@@ -1,10 +1,12 @@
 let oneVectorLength = 20;
-
-const canvas = document.querySelector('canvas');
-const ctx = canvas.getContext('2d');
+//TODO: fix input
+//const canvas = document.querySelector('canvas');
+//const ctx = canvas.getContext('2d');
+var svg = document.getElementById('canvas');
 
 let width = canvas.width = 800;
 let height = canvas.height = 600;
+let stroke_width = 0.1;
 
 let input = document.querySelector('input');
 
@@ -37,13 +39,22 @@ importInput.addEventListener("change", () => {
         } else {
             input.value = read_result.slice(0, 100000);
         }
-        redraw()
-        console.log(read_result);
+        redraw();
     };
-    
-    reader.onerror = function() {
-        console.log(reader.error);
-    };
+});
+
+let exportButton = document.getElementById('export');
+exportButton.addEventListener("click", () => {
+    var svgData = svg.outerHTML;
+    var preface = '<?xml version="1.0" standalone="no"?>\r\n';
+    var svgBlob = new Blob([preface, svgData], {type:"image/svg+xml;charset=utf-8"});
+    var svgUrl = URL.createObjectURL(svgBlob);
+    var downloadLink = document.createElement("a");
+    downloadLink.href = svgUrl;
+    downloadLink.download = "name.svg";
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
 });
 
 let checkboxTriander = document.querySelector('input[id="triander"]');
@@ -215,32 +226,46 @@ function processLetter(direction, length, coords){
 
 function drawDNKdifferentColors(dnk, coords, colors){
     dnk.forEach(function(i){
-        ctx.beginPath();
-        ctx.moveTo(coords.x, coords.y);
+        //ctx.beginPath();
+        //ctx.moveTo(coords.x, coords.y);
+        var element = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        element.setAttributeNS(null, 'x1', coords.x / 50);
+        element.setAttributeNS(null, 'y1', coords.y / 50);
         if (i == "C"){
-            ctx.strokeStyle = colors[0];
+            element.setAttributeNS(null, 'stroke', colors[0]);
+            //ctx.strokeStyle = colors[0];
             processLetter(dirC, lengthC, coords);
         } else if (i == "T" || i == "U"){
-            ctx.strokeStyle = colors[1];
+            element.setAttributeNS(null, 'stroke', colors[1]);
+            //ctx.strokeStyle = colors[1];
             processLetter(dirTU, lengthTU, coords);
         } else if (i == "G"){
-            ctx.strokeStyle = colors[2];
+            element.setAttributeNS(null, 'stroke', colors[2]);
+            //ctx.strokeStyle = colors[2];
             processLetter(dirG, lengthG, coords);
         } else if (i == "A"){
-            ctx.strokeStyle = colors[3];
+            element.setAttributeNS(null, 'stroke', colors[3]);
+            //ctx.strokeStyle = colors[3];
             processLetter(dirA, lengthA, coords);
         }
-        ctx.lineTo(coords.x, coords.y);
-        ctx.stroke();
-        ctx.closePath();
+        element.setAttributeNS(null, 'x2', coords.x / 50);
+        element.setAttributeNS(null, 'y2', coords.y / 50);
+        element.setAttributeNS(null, 'stroke-width', stroke_width);
+        svg.appendChild(element);
+        //ctx.lineTo(coords.x, coords.y);
+        //ctx.stroke();
+        //ctx.closePath();
     });
 }
 
-function drawDNK(dnk, coords){
-    ctx.beginPath();
-    ctx.moveTo(coords.x, coords.y);
+function drawDNK(dnk, coords, color){
+    //ctx.beginPath();
+    //ctx.moveTo(coords.x, coords.y);
 
     dnk.forEach(function(i){
+        var element = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        element.setAttributeNS(null, 'x1', coords.x / 50);
+        element.setAttributeNS(null, 'y1', coords.y / 50);
         if (i == "C"){
             processLetter(dirC, lengthC, coords);
         } else if (i == "T" || i == "U"){
@@ -250,18 +275,24 @@ function drawDNK(dnk, coords){
         } else if (i == "A"){
             processLetter(dirA, lengthA, coords);
         }
-        ctx.lineTo(coords.x, coords.y);
+        element.setAttributeNS(null, 'x2', coords.x / 50);
+        element.setAttributeNS(null, 'y2', coords.y / 50);
+        element.setAttributeNS(null, 'stroke', color);
+        element.setAttributeNS(null, 'stroke-width', stroke_width);
+        svg.appendChild(element);
+        //ctx.lineTo(coords.x, coords.y);
     });
-    ctx.stroke();
-    ctx.closePath();
+    //ctx.stroke();
+    //ctx.closePath();
 }
 
 function redrawTriander(){
     let DNK = input.value;
     DNK = DNK.toUpperCase();
 
-    ctx.fillStyle = 'lightgray';
-    ctx.fillRect(0, 0, width, height);
+    //ctx.fillStyle = 'lightgray';
+    //ctx.fillRect(0, 0, width, height);
+    svg.innerHTML = "";
 
     DNK = DNK.slice(start - 1, end)
     DNK = DNK.split('');
@@ -290,12 +321,12 @@ function redrawTriander(){
         drawDNKdifferentColors(DNK2, coords2, ["magenta", "deepskyblue", "springgreen", "orangered"])
         drawDNKdifferentColors(DNK3, coords3, ["darkorchid", "navy", "lime", "red"])
     } else {
-        ctx.strokeStyle = "blue";
-        drawDNK(DNK1, coords1);
-        ctx.strokeStyle = "green";
-        drawDNK(DNK2, coords2);
-        ctx.strokeStyle = "red";
-        drawDNK(DNK3, coords3);
+        //ctx.strokeStyle = "blue";
+        drawDNK(DNK1, coords1, "blue");
+        //ctx.strokeStyle = "green";
+        drawDNK(DNK2, coords2, "green");
+        //ctx.strokeStyle = "red";
+        drawDNK(DNK3, coords3, "red");
     }
 
 }
@@ -303,18 +334,19 @@ function redrawTriander(){
 function redrawMonoander(){
     let DNK = input.value;
     DNK = DNK.toUpperCase();
-    ctx.fillStyle = 'lightgray';
-    ctx.fillRect(0, 0, width, height);
+    //ctx.fillStyle = 'lightgray';
+    //ctx.fillRect(0, 0, width, height);
+    svg.innerHTML = "";
 
     DNK = DNK.slice(start - 1, end)
     DNK = DNK.split('');
 
     coords = {x: x, y: y}
-    ctx.strokeStyle = "black";
+    //ctx.strokeStyle = "black";
     if (checkboxColors.checked){
         drawDNKdifferentColors(DNK, coords, ["purple", "blue", "green", "orange"]);
     } else {
-        drawDNK(DNK, coords);
+        drawDNK(DNK, coords, "black");
     }
 }
 
