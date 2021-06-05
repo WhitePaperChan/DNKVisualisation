@@ -1,5 +1,4 @@
 let oneVectorLength = 20;
-//TODO: fix input
 //const canvas = document.querySelector('canvas');
 //const ctx = canvas.getContext('2d');
 var svg = document.getElementById('canvas');
@@ -296,6 +295,9 @@ function redrawTriander(){
 
     DNK = DNK.slice(start - 1, end)
     DNK = DNK.split('');
+    DNK = DNK.filter(function(value, index, arr){
+        return (value == "A" || value == "C" || value == "T" || value == "U" || value == "G");
+    });
 
     let DNK1 = [];
     let DNK2 = [];
@@ -340,6 +342,9 @@ function redrawMonoander(){
 
     DNK = DNK.slice(start - 1, end)
     DNK = DNK.split('');
+    DNK = DNK.filter(function(value, index, arr){
+        return (value == "A" || value == "C" || value == "T" || value == "U" || value == "G");
+    });
 
     coords = {x: x, y: y}
     //ctx.strokeStyle = "black";
