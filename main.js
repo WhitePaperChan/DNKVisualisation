@@ -1,8 +1,6 @@
 let oneVectorLength = 20;
 var svg = document.getElementById('canvas');
 
-let width = canvas.width = 800;
-let height = canvas.height = 600;
 let stroke_width = 0.1;
 
 let input = document.querySelector('input');
@@ -18,7 +16,7 @@ let dirG = "down";
 let dirA = "left";
 
 let x = 0; 
-let y = height;
+let y = svg.getBoundingClientRect().height;
 
 let start = 1;
 let end = 100000;
@@ -97,6 +95,20 @@ function defaultParams(){
     checkSameLetters();
 }
 
+
+[zoomNumberInput, xNumberInput, yNumberInput, 
+    lengthCInput, lengthTUInput, lengthGInput, lengthAInput, startInput, endInput].forEach(i => i.addEventListener("input", redraw));
+checkboxTriander.addEventListener('change', redraw);
+checkboxColors.addEventListener('change', redraw);
+input.addEventListener("input", redraw);
+defaultButton.addEventListener("click", defaultParams);
+
+[dirCRadio, dirTURadio, dirGRadio, dirARadio].forEach(
+    j => j.forEach(
+        i => i.addEventListener("click", () => {redraw(); checkSameLetters()})
+    )
+);
+
 function redraw(){
     let invalidInput = false;
     let invalidInputsList = "";
@@ -126,7 +138,7 @@ function redraw(){
         x = -parseInt(xNumberInput.value) * oneVectorLength;
     }
     if (yNumberInput.value != ""){
-        y = height - parseInt(yNumberInput.value) * oneVectorLength;
+        y = svgRect.height - parseInt(yNumberInput.value) * oneVectorLength;
     }
     if (lengthCInput.value != ""){
         lengthC = parseInt(lengthCInput.value);
@@ -168,18 +180,6 @@ function redraw(){
         redrawMonoander();
     }
 }
-
-[zoomNumberInput, xNumberInput, yNumberInput, 
-    lengthCInput, lengthTUInput, lengthGInput, lengthAInput, startInput, endInput].forEach(i => i.addEventListener("input", redraw));
-checkboxTriander.addEventListener('change', redraw);
-checkboxColors.addEventListener('change', redraw);
-input.addEventListener("input", redraw);
-defaultButton.addEventListener("click", defaultParams);
-
-dirCRadio.forEach(i => i.addEventListener("click", () => {redraw(); checkSameLetters()}));
-dirTURadio.forEach(i => i.addEventListener("click", () => {redraw(); checkSameLetters()}));
-dirGRadio.forEach(i => i.addEventListener("click", () => {redraw(); checkSameLetters()}));
-dirARadio.forEach(i => i.addEventListener("click", () => {redraw(); checkSameLetters()}));
 
 function checkSameLetters(){
     var labels = [dirCLabels, dirTULabels, dirGLabels, dirALabels];
