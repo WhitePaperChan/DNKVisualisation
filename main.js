@@ -169,8 +169,8 @@ function redraw(){
     DNK = DNK.slice(start - 1, end)
     DNK = DNK.split('');
     DNK = DNK.filter(function(value, index, arr){
-        return (value == "A" || value == "C" || value == "T" || value == "U" || value == "G");
-    });
+        return (value == "A" || value == "C" || value == "T" || value == "U" || value == "G" || value == "M" || value == "R" || value == "W" || value == "S" || value == "Y" || value == "K" || value == "V" || value == "H" || value == "D" || value == "B" || value == "X" || value == "N");
+    }); //TODO: refactor
     var svgRect = svg.getBoundingClientRect();
     drawLine(0, y, svgRect.width * 50, y, "lightgray");
     drawLine(x, 0, x, svgRect.height * 50, "lightgray");
@@ -222,16 +222,25 @@ function checkSameLetters(){
     }
 }
 
-function processLetter(direction, length, coords){
+function dirNameToDirXY(direction){
     if (direction == "up"){
-        coords.y -= oneVectorLength * length;
-    } else if (direction == "right"){
-        coords.x += oneVectorLength * length;
-    } else if (direction == "down"){
-        coords.y += oneVectorLength * length;
-    } else if (direction == "left"){
-        coords.x -= oneVectorLength * length;
+        return {x: 0, y: -1};
     }
+    if (direction == "right"){
+        return {x: 1, y: 0};
+    }
+    if (direction == "down"){
+        return {x: 0, y: 1};
+    }
+    if (direction == "left"){
+        return {x: -1, y: 0};
+    }
+}
+
+function processLetter(direction, length, coords){
+    dir = dirNameToDirXY(direction);
+    coords.x += dir.x * oneVectorLength * length;
+    coords.y += dir.y * oneVectorLength * length;
 }
 
 function drawLine(x1, y1, x2, y2, color){
@@ -261,6 +270,73 @@ function drawDNKdifferentColors(dnk, coords, colors){
         } else if (i == "A"){
             processLetter(dirA, lengthA, coords);
             drawLine(oldX, oldY, coords.x, coords.y, colors[3]);
+        } else if (i == "M"){
+            processLetter(dirA, lengthA, coords);
+            processLetter(dirC, lengthC, coords);
+            drawLine(oldX, oldY, coords.x, coords.y, colors[3]);
+            drawLine(oldX, oldY, coords.x, coords.y, colors[0]);
+        } else if (i == "R"){
+            processLetter(dirA, lengthA, coords);
+            processLetter(dirG, lengthG, coords);
+            drawLine(oldX, oldY, coords.x, coords.y, colors[3]);
+            drawLine(oldX, oldY, coords.x, coords.y, colors[2]);
+        } else if (i == "W"){
+            processLetter(dirA, lengthA, coords);
+            processLetter(dirTU, lengthTU, coords);
+            drawLine(oldX, oldY, coords.x, coords.y, colors[3]);
+            drawLine(oldX, oldY, coords.x, coords.y, colors[1]);
+        } else if (i == "S"){
+            processLetter(dirC, lengthC, coords);
+            processLetter(dirG, lengthG, coords);
+            drawLine(oldX, oldY, coords.x, coords.y, colors[0]);
+            drawLine(oldX, oldY, coords.x, coords.y, colors[2]);
+        } else if (i == "Y"){
+            processLetter(dirC, lengthC, coords);
+            processLetter(dirTU, lengthTU, coords);
+            drawLine(oldX, oldY, coords.x, coords.y, colors[0]);
+            drawLine(oldX, oldY, coords.x, coords.y, colors[1]);
+        } else if (i == "K"){
+            processLetter(dirG, lengthG, coords);
+            processLetter(dirTU, lengthTU, coords);
+            drawLine(oldX, oldY, coords.x, coords.y, colors[2]);
+            drawLine(oldX, oldY, coords.x, coords.y, colors[1]);
+        } else if (i == "V"){
+            processLetter(dirA, lengthA, coords);
+            processLetter(dirC, lengthC, coords);
+            processLetter(dirG, lengthG, coords);
+            drawLine(oldX, oldY, coords.x, coords.y, colors[3]);
+            drawLine(oldX, oldY, coords.x, coords.y, colors[0]);
+            drawLine(oldX, oldY, coords.x, coords.y, colors[2]);
+        } else if (i == "H"){
+            processLetter(dirA, lengthA, coords);
+            processLetter(dirC, lengthC, coords);
+            processLetter(dirTU, lengthTU, coords);
+            drawLine(oldX, oldY, coords.x, coords.y, colors[3]);
+            drawLine(oldX, oldY, coords.x, coords.y, colors[0]);
+            drawLine(oldX, oldY, coords.x, coords.y, colors[1]);
+        } else if (i == "D"){
+            processLetter(dirA, lengthA, coords);
+            processLetter(dirG, lengthG, coords);
+            processLetter(dirTU, lengthTU, coords);
+            drawLine(oldX, oldY, coords.x, coords.y, colors[3]);
+            drawLine(oldX, oldY, coords.x, coords.y, colors[2]);
+            drawLine(oldX, oldY, coords.x, coords.y, colors[1]);
+        } else if (i == "B"){
+            processLetter(dirC, lengthC, coords);
+            processLetter(dirG, lengthG, coords);
+            processLetter(dirTU, lengthTU, coords);
+            drawLine(oldX, oldY, coords.x, coords.y, colors[0]);
+            drawLine(oldX, oldY, coords.x, coords.y, colors[2]);
+            drawLine(oldX, oldY, coords.x, coords.y, colors[1]);
+        } else if (i == "X" || i == "N"){
+            processLetter(dirA, lengthA, coords);
+            processLetter(dirC, lengthC, coords);
+            processLetter(dirG, lengthG, coords);
+            processLetter(dirTU, lengthTU, coords);
+            drawLine(oldX, oldY, coords.x, coords.y, colors[3]);
+            drawLine(oldX, oldY, coords.x, coords.y, colors[2]);
+            drawLine(oldX, oldY, coords.x, coords.y, colors[1]);
+            drawLine(oldX, oldY, coords.x, coords.y, colors[0]);
         }
     });
 }
@@ -278,6 +354,45 @@ function drawDNK(dnk, coords, color){
             processLetter(dirG, lengthG, coords);
         } else if (i == "A"){
             processLetter(dirA, lengthA, coords);
+        } else if (i == "M"){
+            processLetter(dirA, lengthA, coords);
+            processLetter(dirC, lengthC, coords);
+        } else if (i == "R"){
+            processLetter(dirA, lengthA, coords);
+            processLetter(dirG, lengthG, coords);
+        } else if (i == "W"){
+            processLetter(dirA, lengthA, coords);
+            processLetter(dirTU, lengthTU, coords);
+        } else if (i == "S"){
+            processLetter(dirC, lengthC, coords);
+            processLetter(dirG, lengthG, coords);
+        } else if (i == "Y"){
+            processLetter(dirC, lengthC, coords);
+            processLetter(dirTU, lengthTU, coords);
+        } else if (i == "K"){
+            processLetter(dirG, lengthG, coords);
+            processLetter(dirTU, lengthTU, coords);
+        } else if (i == "V"){
+            processLetter(dirA, lengthA, coords);
+            processLetter(dirC, lengthC, coords);
+            processLetter(dirG, lengthG, coords);
+        } else if (i == "H"){
+            processLetter(dirA, lengthA, coords);
+            processLetter(dirC, lengthC, coords);
+            processLetter(dirTU, lengthTU, coords);
+        } else if (i == "D"){
+            processLetter(dirA, lengthA, coords);
+            processLetter(dirG, lengthG, coords);
+            processLetter(dirTU, lengthTU, coords);
+        } else if (i == "B"){
+            processLetter(dirC, lengthC, coords);
+            processLetter(dirG, lengthG, coords);
+            processLetter(dirTU, lengthTU, coords);
+        } else if (i == "X" || i == "N"){
+            processLetter(dirA, lengthA, coords);
+            processLetter(dirC, lengthC, coords);
+            processLetter(dirG, lengthG, coords);
+            processLetter(dirTU, lengthTU, coords);
         }
         drawLine(oldX, oldY, coords.x, coords.y, color);
     });
