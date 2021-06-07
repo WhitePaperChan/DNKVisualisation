@@ -100,6 +100,7 @@ function defaultParams(){
 function redraw(){
     let invalidInput = false;
     let invalidInputsList = "";
+    var svgRect = svg.getBoundingClientRect();
     [[zoomNumberInput, "zoom"], [xNumberInput, "x"], [yNumberInput, "y"], 
     [lengthCInput, "C"], [lengthTUInput, "T/U"], [lengthGInput, "G"], [lengthAInput, "A"], 
     [startInput, "start"], [endInput, "end"]].forEach(
@@ -149,6 +150,18 @@ function redraw(){
     if (endInput.value != ""){
         end = parseInt(endInput.value);
     }
+    DNK = input.value;
+    DNK = DNK.toUpperCase();
+    svg.innerHTML = "";
+
+    DNK = DNK.slice(start - 1, end)
+    DNK = DNK.split('');
+    DNK = DNK.filter(function(value, index, arr){
+        return (value == "A" || value == "C" || value == "T" || value == "U" || value == "G");
+    });
+    var svgRect = svg.getBoundingClientRect();
+    drawLine(0, y, svgRect.width * 50, y, "lightgray");
+    drawLine(x, 0, x, svgRect.height * 50, "lightgray");
     if (checkboxTriander.checked){
         redrawTriander();
     } else {
@@ -221,37 +234,42 @@ function processLetter(direction, length, coords){
     }
 }
 
+function drawLine(x1, y1, x2, y2, color){
+    var element = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    element.setAttributeNS(null, 'x1', x1 / 50);
+    element.setAttributeNS(null, 'y1', y1 / 50);
+    element.setAttributeNS(null, 'x2', x2 / 50);
+    element.setAttributeNS(null, 'y2', y2 / 50);
+    element.setAttributeNS(null, 'stroke', color);
+    element.setAttributeNS(null, 'stroke-width', stroke_width);
+    svg.appendChild(element);
+}
+
 function drawDNKdifferentColors(dnk, coords, colors){
     dnk.forEach(function(i){
-        var element = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-        element.setAttributeNS(null, 'x1', coords.x / 50);
-        element.setAttributeNS(null, 'y1', coords.y / 50);
+        var oldX = coords.x;
+        var oldY = coords.y;
         if (i == "C"){
-            element.setAttributeNS(null, 'stroke', colors[0]);
             processLetter(dirC, lengthC, coords);
+            drawLine(oldX, oldY, coords.x, coords.y, colors[0]);
         } else if (i == "T" || i == "U"){
-            element.setAttributeNS(null, 'stroke', colors[1]);
             processLetter(dirTU, lengthTU, coords);
+            drawLine(oldX, oldY, coords.x, coords.y, colors[1]);
         } else if (i == "G"){
-            element.setAttributeNS(null, 'stroke', colors[2]);
             processLetter(dirG, lengthG, coords);
+            drawLine(oldX, oldY, coords.x, coords.y, colors[2]);
         } else if (i == "A"){
-            element.setAttributeNS(null, 'stroke', colors[3]);
             processLetter(dirA, lengthA, coords);
+            drawLine(oldX, oldY, coords.x, coords.y, colors[3]);
         }
-        element.setAttributeNS(null, 'x2', coords.x / 50);
-        element.setAttributeNS(null, 'y2', coords.y / 50);
-        element.setAttributeNS(null, 'stroke-width', stroke_width);
-        svg.appendChild(element);
     });
 }
 
 function drawDNK(dnk, coords, color){
 
     dnk.forEach(function(i){
-        var element = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-        element.setAttributeNS(null, 'x1', coords.x / 50);
-        element.setAttributeNS(null, 'y1', coords.y / 50);
+        var oldX = coords.x;
+        var oldY = coords.y;
         if (i == "C"){
             processLetter(dirC, lengthC, coords);
         } else if (i == "T" || i == "U"){
@@ -261,26 +279,11 @@ function drawDNK(dnk, coords, color){
         } else if (i == "A"){
             processLetter(dirA, lengthA, coords);
         }
-        element.setAttributeNS(null, 'x2', coords.x / 50);
-        element.setAttributeNS(null, 'y2', coords.y / 50);
-        element.setAttributeNS(null, 'stroke', color);
-        element.setAttributeNS(null, 'stroke-width', stroke_width);
-        svg.appendChild(element);
+        drawLine(oldX, oldY, coords.x, coords.y, color);
     });
 }
 
 function redrawTriander(){
-    let DNK = input.value;
-    DNK = DNK.toUpperCase();
-
-    svg.innerHTML = "";
-
-
-    DNK = DNK.slice(start - 1, end)
-    DNK = DNK.split('');
-    DNK = DNK.filter(function(value, index, arr){
-        return (value == "A" || value == "C" || value == "T" || value == "U" || value == "G");
-    });
 
     let DNK1 = [];
     let DNK2 = [];
@@ -301,26 +304,6 @@ function redrawTriander(){
     var coords2 = {x: coords1.x, y: coords1.y};
     var coords3 = {x: coords1.x, y: coords1.y};
 
-    var svgRect = svg.getBoundingClientRect();
-    var element = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-    element.setAttributeNS(null, 'x1', 0);
-    element.setAttributeNS(null, 'y1', coords1.y / 50);
-    element.setAttributeNS(null, 'x2', svgRect.width);
-    element.setAttributeNS(null, 'y2', coords1.y / 50);
-    element.setAttributeNS(null, 'stroke', "lightgray");
-    element.setAttributeNS(null, 'stroke-width', stroke_width);
-    svg.appendChild(element);
-
-    
-    var element = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-    element.setAttributeNS(null, 'x1', coords1.x / 50);
-    element.setAttributeNS(null, 'y1', 0);
-    element.setAttributeNS(null, 'x2', coords1.x / 50);
-    element.setAttributeNS(null, 'y2', svgRect.height);
-    element.setAttributeNS(null, 'stroke', "lightgray");
-    element.setAttributeNS(null, 'stroke-width', stroke_width);
-    svg.appendChild(element);
-
     if (checkboxColors.checked){
         drawDNKdifferentColors(DNK1, coords1, ["purple", "blue", "green", "orange"])
         drawDNKdifferentColors(DNK2, coords2, ["magenta", "deepskyblue", "springgreen", "orangered"])
@@ -334,37 +317,9 @@ function redrawTriander(){
 }
 
 function redrawMonoander(){
-    let DNK = input.value;
-    DNK = DNK.toUpperCase();
-    svg.innerHTML = "";
-
-    DNK = DNK.slice(start - 1, end)
-    DNK = DNK.split('');
-    DNK = DNK.filter(function(value, index, arr){
-        return (value == "A" || value == "C" || value == "T" || value == "U" || value == "G");
-    });
 
     coords = {x: x, y: y}
     
-    var svgRect = svg.getBoundingClientRect();
-    var element = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-    element.setAttributeNS(null, 'x1', 0);
-    element.setAttributeNS(null, 'y1', coords.y / 50);
-    element.setAttributeNS(null, 'x2', svgRect.width);
-    element.setAttributeNS(null, 'y2', coords.y / 50);
-    element.setAttributeNS(null, 'stroke', "lightgray");
-    element.setAttributeNS(null, 'stroke-width', stroke_width);
-    svg.appendChild(element);
-
-    
-    var element = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-    element.setAttributeNS(null, 'x1', coords.x / 50);
-    element.setAttributeNS(null, 'y1', 0);
-    element.setAttributeNS(null, 'x2', coords.x / 50);
-    element.setAttributeNS(null, 'y2', svgRect.height);
-    element.setAttributeNS(null, 'stroke', "lightgray");
-    element.setAttributeNS(null, 'stroke-width', stroke_width);
-    svg.appendChild(element);
     if (checkboxColors.checked){
         drawDNKdifferentColors(DNK, coords, ["purple", "blue", "green", "orange"]);
     } else {
