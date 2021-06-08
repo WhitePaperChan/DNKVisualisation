@@ -21,6 +21,60 @@ let y = svg.getBoundingClientRect().height;
 let start = 1;
 let end = 100000;
 
+let monoanderSolid = "#000000"; //black
+let monoanderC = "#800080"; //purple
+let monoanderTU = "#0000FF"; //blue
+let monoanderG = "#008000"; //green
+let monoanderA = "#FFA500"; //orange
+
+let triander1Solid = "#0000FF"; //black
+let triander1C = "#800080"; //purple
+let triander1TU = "#0000FF"; //blue
+let triander1G = "#008000"; //green
+let triander1A = "#FFA500"; //orange
+
+let triander2Solid = "#008000"; //black
+let triander2C = "#FF00FF"; //purple
+let triander2TU = "#00BFFF"; //blue
+let triander2G = "#00FF7F"; //green
+let triander2A = "#FF4500"; //orange
+
+let triander3Solid = "#FF0000"; //black
+let triander3C = "#9932CC"; //purple
+let triander3TU = "#000080"; //blue
+let triander3G = "#00FF00"; //green
+let triander3A = "#FF0000"; //orange
+
+let pickerMonoanderSolid = document.getElementById('monoanderSolid');
+let pickerMonoanderC = document.getElementById('monoanderC');
+let pickerMonoanderTU = document.getElementById('monoanderTU');
+let pickerMonoanderG = document.getElementById('monoanderG');
+let pickerMonoanderA = document.getElementById('monoanderA');
+
+let pickerTriander1Solid = document.getElementById('triander1Solid');
+let pickerTriander1C = document.getElementById('triander1C');
+let pickerTriander1TU = document.getElementById('triander1TU');
+let pickerTriander1G = document.getElementById('triander1G');
+let pickerTriander1A = document.getElementById('triander1A');
+
+let pickerTriander2Solid = document.getElementById('triander2Solid');
+let pickerTriander2C = document.getElementById('triander2C');
+let pickerTriander2TU = document.getElementById('triander2TU');
+let pickerTriander2G = document.getElementById('triander2G');
+let pickerTriander2A = document.getElementById('triander2A');
+
+let pickerTriander3Solid = document.getElementById('triander3Solid');
+let pickerTriander3C = document.getElementById('triander3C');
+let pickerTriander3TU = document.getElementById('triander3TU');
+let pickerTriander3G = document.getElementById('triander3G');
+let pickerTriander3A = document.getElementById('triander3A');
+
+[pickerMonoanderSolid, pickerMonoanderC, pickerMonoanderTU, pickerMonoanderG, pickerMonoanderA, 
+    pickerTriander1Solid, pickerTriander1C, pickerTriander1TU, pickerTriander1G, pickerTriander1A, 
+    pickerTriander2Solid, pickerTriander2C, pickerTriander2TU, pickerTriander2G, pickerTriander2A, 
+    pickerTriander3Solid, pickerTriander3C, pickerTriander3TU, pickerTriander3G, pickerTriander3A
+].forEach(i => i.addEventListener('input', () => redraw()));
+
 let importInput = document.getElementById('import');
 
 importInput.addEventListener("change", () => {
@@ -162,6 +216,30 @@ function redraw(){
     if (endInput.value != ""){
         end = parseInt(endInput.value);
     }
+    monoanderSolid = pickerMonoanderSolid.value;
+    monoanderC = pickerMonoanderC.value;
+    monoanderTU = pickerMonoanderTU.value;
+    monoanderG = pickerMonoanderG.value;
+    monoanderA = pickerMonoanderA.value;
+
+    triander1Solid = pickerTriander1Solid.value;
+    triander1C = pickerTriander1C.value;
+    triander1TU = pickerTriander1TU.value;
+    triander1G = pickerTriander1G.value;
+    triander1A = pickerTriander1A.value;
+
+    triander2Solid = pickerTriander2Solid.value;
+    triander2C = pickerTriander2C.value;
+    triander2TU = pickerTriander2TU.value;
+    triander2G = pickerTriander2G.value;
+    triander2A = pickerTriander2A.value;
+
+    triander3Solid = pickerTriander3Solid.value;
+    triander3C = pickerTriander3C.value;
+    triander3TU = pickerTriander3TU.value;
+    triander3G = pickerTriander3G.value;
+    triander3A = pickerTriander3A.value;
+
     DNK = input.value;
     DNK = DNK.toUpperCase();
     svg.innerHTML = "";
@@ -169,8 +247,8 @@ function redraw(){
     DNK = DNK.slice(start - 1, end)
     DNK = DNK.split('');
     DNK = DNK.filter(function(value, index, arr){
-        return (value == "A" || value == "C" || value == "T" || value == "U" || value == "G" || value == "M" || value == "R" || value == "W" || value == "S" || value == "Y" || value == "K" || value == "V" || value == "H" || value == "D" || value == "B" || value == "X" || value == "N");
-    }); //TODO: refactor
+        return (["A", "C", "T", "U", "G", "M", "R", "W", "S", "Y", "K", "V", "H", "D", "B", "X", "N"].includes(value));
+    });
     var svgRect = svg.getBoundingClientRect();
     drawLine(0, y, svgRect.width * 50, y, "lightgray");
     drawLine(x, 0, x, svgRect.height * 50, "lightgray");
@@ -420,13 +498,13 @@ function redrawTriander(){
     var coords3 = {x: coords1.x, y: coords1.y};
 
     if (checkboxColors.checked){
-        drawDNKdifferentColors(DNK1, coords1, ["purple", "blue", "green", "orange"])
-        drawDNKdifferentColors(DNK2, coords2, ["magenta", "deepskyblue", "springgreen", "orangered"])
-        drawDNKdifferentColors(DNK3, coords3, ["darkorchid", "navy", "lime", "red"])
+        drawDNKdifferentColors(DNK1, coords1, [triander1C, triander1TU, triander1G, triander1A]);//orange - #FFA500
+        drawDNKdifferentColors(DNK2, coords2, [triander2C, triander2TU, triander2G, triander2A]);//orangered - #FF4500
+        drawDNKdifferentColors(DNK3, coords3, [triander3C, triander3TU, triander3G, triander3A]);//red - #FF0000
     } else {
-        drawDNK(DNK1, coords1, "blue");
-        drawDNK(DNK2, coords2, "green");
-        drawDNK(DNK3, coords3, "red");
+        drawDNK(DNK1, coords1, triander1Solid);
+        drawDNK(DNK2, coords2, triander2Solid);
+        drawDNK(DNK3, coords3, triander3Solid);//red - #FF0000
     }
 
 }
@@ -436,9 +514,9 @@ function redrawMonoander(){
     coords = {x: x, y: y}
     
     if (checkboxColors.checked){
-        drawDNKdifferentColors(DNK, coords, ["purple", "blue", "green", "orange"]);
+        drawDNKdifferentColors(DNK, coords, [monoanderC, monoanderTU, monoanderG, monoanderA]);
     } else {
-        drawDNK(DNK, coords, "black");
+        drawDNK(DNK, coords, monoanderSolid);
     }
 }
 
