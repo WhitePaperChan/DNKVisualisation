@@ -21,29 +21,29 @@ let y = svg.getBoundingClientRect().height;
 let start = 1;
 let end = 100000;
 
-let monoanderSolid = "#000000"; //black
-let monoanderC = "#800080"; //purple
-let monoanderTU = "#0000FF"; //blue
-let monoanderG = "#008000"; //green
-let monoanderA = "#FFA500"; //orange
+let monoanderSolid = "#000000"; 
+let monoanderC = "#800080"; 
+let monoanderTU = "#0000FF";
+let monoanderG = "#008000";
+let monoanderA = "#FFA500"; 
 
-let triander1Solid = "#0000FF"; //black
-let triander1C = "#800080"; //purple
-let triander1TU = "#0000FF"; //blue
-let triander1G = "#008000"; //green
-let triander1A = "#FFA500"; //orange
+let triander1Solid = "#0000FF";
+let triander1C = "#800080";
+let triander1TU = "#0000FF"; 
+let triander1G = "#008000"; 
+let triander1A = "#FFA500"; 
 
-let triander2Solid = "#008000"; //black
-let triander2C = "#FF00FF"; //purple
-let triander2TU = "#00BFFF"; //blue
-let triander2G = "#00FF7F"; //green
-let triander2A = "#FF4500"; //orange
+let triander2Solid = "#008000";
+let triander2C = "#FF00FF";
+let triander2TU = "#00BFFF";
+let triander2G = "#00FF7F";
+let triander2A = "#FF4500";
 
-let triander3Solid = "#FF0000"; //black
-let triander3C = "#9932CC"; //purple
-let triander3TU = "#000080"; //blue
-let triander3G = "#00FF00"; //green
-let triander3A = "#FF0000"; //orange
+let triander3Solid = "#FF0000";
+let triander3C = "#9932CC";
+let triander3TU = "#000080";
+let triander3G = "#00FF00"; 
+let triander3A = "#FF0000";
 
 let pickerMonoanderSolid = document.getElementById('monoanderSolid');
 let pickerMonoanderC = document.getElementById('monoanderC');
@@ -148,7 +148,6 @@ function defaultParams(){
     redraw();
     checkSameLetters();
 }
-
 
 [zoomNumberInput, xNumberInput, yNumberInput, 
     lengthCInput, lengthTUInput, lengthGInput, lengthAInput, startInput, endInput].forEach(i => i.addEventListener("input", redraw));
@@ -259,6 +258,30 @@ function redraw(){
     }
 }
 
+function hexToRGB(color){
+    let r = color.slice(1, 3);
+    let g = color.slice(3, 5);
+    let b = color.slice(5);
+    r = parseInt(r, 16);
+    g = parseInt(g, 16);
+    b = parseInt(b, 16);
+    return [r, g, b];
+}
+
+function middleColor(colors){
+    color = [0, 0, 0];
+    colors.forEach(i => {
+        i = hexToRGB(i);
+        color[0] += i[0]; 
+        color[1] += i[1]; 
+        color[2] += i[2]
+    });
+    color[0] /= colors.length;
+    color[1] /= colors.length;
+    color[2] /= colors.length;
+    return "rgb(" + color[0] + "," + color[1] + "," + color[2] + ")"
+}
+
 function checkSameLetters(){
     var labels = [dirCLabels, dirTULabels, dirGLabels, dirALabels];
     var dirs = [dirC, dirTU, dirG, dirA];
@@ -351,70 +374,53 @@ function drawDNKdifferentColors(dnk, coords, colors){
         } else if (i == "M"){
             processLetter(dirA, lengthA, coords);
             processLetter(dirC, lengthC, coords);
-            drawLine(oldX, oldY, coords.x, coords.y, colors[3]);
-            drawLine(oldX, oldY, coords.x, coords.y, colors[0]);
+            drawLine(oldX, oldY, coords.x, coords.y, middleColor([colors[3], colors[0]]));
         } else if (i == "R"){
             processLetter(dirA, lengthA, coords);
             processLetter(dirG, lengthG, coords);
-            drawLine(oldX, oldY, coords.x, coords.y, colors[3]);
-            drawLine(oldX, oldY, coords.x, coords.y, colors[2]);
+            drawLine(oldX, oldY, coords.x, coords.y, middleColor([colors[3], colors[2]]));
         } else if (i == "W"){
             processLetter(dirA, lengthA, coords);
             processLetter(dirTU, lengthTU, coords);
-            drawLine(oldX, oldY, coords.x, coords.y, colors[3]);
-            drawLine(oldX, oldY, coords.x, coords.y, colors[1]);
+            drawLine(oldX, oldY, coords.x, coords.y, middleColor([colors[3], colors[1]]));
         } else if (i == "S"){
             processLetter(dirC, lengthC, coords);
             processLetter(dirG, lengthG, coords);
-            drawLine(oldX, oldY, coords.x, coords.y, colors[0]);
-            drawLine(oldX, oldY, coords.x, coords.y, colors[2]);
+            drawLine(oldX, oldY, coords.x, coords.y, middleColor([colors[0], colors[2]]));
         } else if (i == "Y"){
             processLetter(dirC, lengthC, coords);
             processLetter(dirTU, lengthTU, coords);
-            drawLine(oldX, oldY, coords.x, coords.y, colors[0]);
-            drawLine(oldX, oldY, coords.x, coords.y, colors[1]);
+            drawLine(oldX, oldY, coords.x, coords.y, middleColor([colors[0], colors[1]]));
         } else if (i == "K"){
             processLetter(dirG, lengthG, coords);
             processLetter(dirTU, lengthTU, coords);
-            drawLine(oldX, oldY, coords.x, coords.y, colors[2]);
-            drawLine(oldX, oldY, coords.x, coords.y, colors[1]);
+            drawLine(oldX, oldY, coords.x, coords.y, middleColor([colors[2], colors[1]]));
         } else if (i == "V"){
             processLetter(dirA, lengthA, coords);
             processLetter(dirC, lengthC, coords);
             processLetter(dirG, lengthG, coords);
-            drawLine(oldX, oldY, coords.x, coords.y, colors[3]);
-            drawLine(oldX, oldY, coords.x, coords.y, colors[0]);
-            drawLine(oldX, oldY, coords.x, coords.y, colors[2]);
+            drawLine(oldX, oldY, coords.x, coords.y, middleColor([colors[3], colors[0], colors[2]]));
         } else if (i == "H"){
             processLetter(dirA, lengthA, coords);
             processLetter(dirC, lengthC, coords);
             processLetter(dirTU, lengthTU, coords);
-            drawLine(oldX, oldY, coords.x, coords.y, colors[3]);
-            drawLine(oldX, oldY, coords.x, coords.y, colors[0]);
-            drawLine(oldX, oldY, coords.x, coords.y, colors[1]);
+            drawLine(oldX, oldY, coords.x, coords.y, middleColor([colors[3], colors[0], colors[1]]));
         } else if (i == "D"){
             processLetter(dirA, lengthA, coords);
             processLetter(dirG, lengthG, coords);
             processLetter(dirTU, lengthTU, coords);
-            drawLine(oldX, oldY, coords.x, coords.y, colors[3]);
-            drawLine(oldX, oldY, coords.x, coords.y, colors[2]);
-            drawLine(oldX, oldY, coords.x, coords.y, colors[1]);
+            drawLine(oldX, oldY, coords.x, coords.y, middleColor([colors[1], colors[2], colors[3]]));
         } else if (i == "B"){
             processLetter(dirC, lengthC, coords);
             processLetter(dirG, lengthG, coords);
             processLetter(dirTU, lengthTU, coords);
-            drawLine(oldX, oldY, coords.x, coords.y, colors[0]);
-            drawLine(oldX, oldY, coords.x, coords.y, colors[2]);
-            drawLine(oldX, oldY, coords.x, coords.y, colors[1]);
+            drawLine(oldX, oldY, coords.x, coords.y, middleColor([colors[1], colors[2], colors[0]]));
         } else if (i == "X" || i == "N"){
             processLetter(dirA, lengthA, coords);
             processLetter(dirC, lengthC, coords);
             processLetter(dirG, lengthG, coords);
             processLetter(dirTU, lengthTU, coords);
-            drawLine(oldX, oldY, coords.x, coords.y, colors[3]);
-            drawLine(oldX, oldY, coords.x, coords.y, colors[2]);
-            drawLine(oldX, oldY, coords.x, coords.y, colors[1]);
-            drawLine(oldX, oldY, coords.x, coords.y, colors[0]);
+            drawLine(oldX, oldY, coords.x, coords.y, middleColor([colors[0], colors[1], colors[2], colors[3]]));
         }
     });
 }
@@ -498,13 +504,13 @@ function redrawTriander(){
     var coords3 = {x: coords1.x, y: coords1.y};
 
     if (checkboxColors.checked){
-        drawDNKdifferentColors(DNK1, coords1, [triander1C, triander1TU, triander1G, triander1A]);//orange - #FFA500
-        drawDNKdifferentColors(DNK2, coords2, [triander2C, triander2TU, triander2G, triander2A]);//orangered - #FF4500
-        drawDNKdifferentColors(DNK3, coords3, [triander3C, triander3TU, triander3G, triander3A]);//red - #FF0000
+        drawDNKdifferentColors(DNK1, coords1, [triander1C, triander1TU, triander1G, triander1A]);
+        drawDNKdifferentColors(DNK2, coords2, [triander2C, triander2TU, triander2G, triander2A]);
+        drawDNKdifferentColors(DNK3, coords3, [triander3C, triander3TU, triander3G, triander3A]);
     } else {
         drawDNK(DNK1, coords1, triander1Solid);
         drawDNK(DNK2, coords2, triander2Solid);
-        drawDNK(DNK3, coords3, triander3Solid);//red - #FF0000
+        drawDNK(DNK3, coords3, triander3Solid);
     }
 
 }
