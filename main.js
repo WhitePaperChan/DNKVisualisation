@@ -45,6 +45,11 @@ let triander3TU = "#000080";
 let triander3G = "#00FF00"; 
 let triander3A = "#FF0000";
 
+let strokeMonoander = 0.1;
+let strokeBranch1 = 0.1;
+let strokeBranch2 = 0.1;
+let strokeBranch3 = 0.1;
+
 let pickerMonoanderSolid = document.getElementById('monoanderSolid');
 let pickerMonoanderC = document.getElementById('monoanderC');
 let pickerMonoanderTU = document.getElementById('monoanderTU');
@@ -68,6 +73,13 @@ let pickerTriander3C = document.getElementById('triander3C');
 let pickerTriander3TU = document.getElementById('triander3TU');
 let pickerTriander3G = document.getElementById('triander3G');
 let pickerTriander3A = document.getElementById('triander3A');
+
+let strokeMonoanderInput = document.getElementById('strokeMonoander');
+let strokeBranch1Input = document.getElementById('strokeBranch1');
+let strokeBranch2Input = document.getElementById('strokeBranch2');
+let strokeBranch3Input = document.getElementById('strokeBranch3');
+
+[strokeMonoanderInput, strokeBranch1Input, strokeBranch2Input, strokeBranch3Input].forEach(i => i.addEventListener('input', () => redraw()));
 
 [pickerMonoanderSolid, pickerMonoanderC, pickerMonoanderTU, pickerMonoanderG, pickerMonoanderA, 
     pickerTriander1Solid, pickerTriander1C, pickerTriander1TU, pickerTriander1G, pickerTriander1A, 
@@ -168,7 +180,8 @@ function redraw(){
     var svgRect = svg.getBoundingClientRect();
     [[zoomNumberInput, "zoom"], [xNumberInput, "x"], [yNumberInput, "y"], 
     [lengthCInput, "C"], [lengthTUInput, "T/U"], [lengthGInput, "G"], [lengthAInput, "A"], 
-    [startInput, "start"], [endInput, "end"]].forEach(
+    [startInput, "start"], [endInput, "end"], 
+    [strokeMonoanderInput, "monoander stroke"], [strokeBranch1Input, "branch 1 stroke"], [strokeBranch2Input, "branch 2 stroke"], [strokeBranch3Input, "branch 3 stroke"]].forEach(
             i => {
                 if (!i[0].validity.valid){
                     invalidInput = true; 
@@ -204,6 +217,18 @@ function redraw(){
     }
     if (lengthAInput.value != ""){
         lengthA = parseInt(lengthAInput.value);
+    }
+    if (strokeMonoanderInput.value != ""){
+        strokeMonoander = parseFloat(strokeMonoanderInput.value);
+    }
+    if (strokeBranch1Input.value != ""){
+        strokeBranch1 = parseFloat(strokeBranch1Input.value);
+    }
+    if (strokeBranch2Input.value != ""){
+        strokeBranch2 = parseFloat(strokeBranch2Input.value);
+    }
+    if (strokeBranch3Input.value != ""){
+        strokeBranch3 = parseFloat(strokeBranch3Input.value);
     }
     dirCRadio.forEach(i => {if (i.checked){dirC = i.value}})
     dirTURadio.forEach(i => {if (i.checked){dirTU = i.value}})
@@ -249,8 +274,8 @@ function redraw(){
         return (["A", "C", "T", "U", "G", "M", "R", "W", "S", "Y", "K", "V", "H", "D", "B", "X", "N"].includes(value));
     });
     var svgRect = svg.getBoundingClientRect();
-    drawLine(0, y, svgRect.width * 50, y, "lightgray");
-    drawLine(x, 0, x, svgRect.height * 50, "lightgray");
+    drawLine(0, y, svgRect.width * 50, y, "lightgray", stroke_width);
+    drawLine(x, 0, x, svgRect.height * 50, "lightgray", stroke_width);
     if (checkboxTriander.checked){
         redrawTriander();
     } else {
@@ -344,88 +369,88 @@ function processLetter(direction, length, coords){
     coords.y += dir.y * oneVectorLength * length;
 }
 
-function drawLine(x1, y1, x2, y2, color){
+function drawLine(x1, y1, x2, y2, color, stroke){
     var element = document.createElementNS('http://www.w3.org/2000/svg', 'line');
     element.setAttributeNS(null, 'x1', x1 / 50);
     element.setAttributeNS(null, 'y1', y1 / 50);
     element.setAttributeNS(null, 'x2', x2 / 50);
     element.setAttributeNS(null, 'y2', y2 / 50);
     element.setAttributeNS(null, 'stroke', color);
-    element.setAttributeNS(null, 'stroke-width', stroke_width);
+    element.setAttributeNS(null, 'stroke-width', stroke);
     svg.appendChild(element);
 }
 
-function drawDNKdifferentColors(dnk, coords, colors){
+function drawDNKdifferentColors(dnk, coords, colors, stroke){
     dnk.forEach(function(i){
         var oldX = coords.x;
         var oldY = coords.y;
         if (i == "C"){
             processLetter(dirC, lengthC, coords);
-            drawLine(oldX, oldY, coords.x, coords.y, colors[0]);
+            drawLine(oldX, oldY, coords.x, coords.y, colors[0], stroke);
         } else if (i == "T" || i == "U"){
             processLetter(dirTU, lengthTU, coords);
-            drawLine(oldX, oldY, coords.x, coords.y, colors[1]);
+            drawLine(oldX, oldY, coords.x, coords.y, colors[1], stroke);
         } else if (i == "G"){
             processLetter(dirG, lengthG, coords);
-            drawLine(oldX, oldY, coords.x, coords.y, colors[2]);
+            drawLine(oldX, oldY, coords.x, coords.y, colors[2], stroke);
         } else if (i == "A"){
             processLetter(dirA, lengthA, coords);
-            drawLine(oldX, oldY, coords.x, coords.y, colors[3]);
+            drawLine(oldX, oldY, coords.x, coords.y, colors[3], stroke);
         } else if (i == "M"){
             processLetter(dirA, lengthA, coords);
             processLetter(dirC, lengthC, coords);
-            drawLine(oldX, oldY, coords.x, coords.y, middleColor([colors[3], colors[0]]));
+            drawLine(oldX, oldY, coords.x, coords.y, middleColor([colors[3], colors[0]]), stroke);
         } else if (i == "R"){
             processLetter(dirA, lengthA, coords);
             processLetter(dirG, lengthG, coords);
-            drawLine(oldX, oldY, coords.x, coords.y, middleColor([colors[3], colors[2]]));
+            drawLine(oldX, oldY, coords.x, coords.y, middleColor([colors[3], colors[2]]), stroke);
         } else if (i == "W"){
             processLetter(dirA, lengthA, coords);
             processLetter(dirTU, lengthTU, coords);
-            drawLine(oldX, oldY, coords.x, coords.y, middleColor([colors[3], colors[1]]));
+            drawLine(oldX, oldY, coords.x, coords.y, middleColor([colors[3], colors[1]]), stroke);
         } else if (i == "S"){
             processLetter(dirC, lengthC, coords);
             processLetter(dirG, lengthG, coords);
-            drawLine(oldX, oldY, coords.x, coords.y, middleColor([colors[0], colors[2]]));
+            drawLine(oldX, oldY, coords.x, coords.y, middleColor([colors[0], colors[2]]), stroke);
         } else if (i == "Y"){
             processLetter(dirC, lengthC, coords);
             processLetter(dirTU, lengthTU, coords);
-            drawLine(oldX, oldY, coords.x, coords.y, middleColor([colors[0], colors[1]]));
+            drawLine(oldX, oldY, coords.x, coords.y, middleColor([colors[0], colors[1]]), stroke);
         } else if (i == "K"){
             processLetter(dirG, lengthG, coords);
             processLetter(dirTU, lengthTU, coords);
-            drawLine(oldX, oldY, coords.x, coords.y, middleColor([colors[2], colors[1]]));
+            drawLine(oldX, oldY, coords.x, coords.y, middleColor([colors[2], colors[1]]), stroke);
         } else if (i == "V"){
             processLetter(dirA, lengthA, coords);
             processLetter(dirC, lengthC, coords);
             processLetter(dirG, lengthG, coords);
-            drawLine(oldX, oldY, coords.x, coords.y, middleColor([colors[3], colors[0], colors[2]]));
+            drawLine(oldX, oldY, coords.x, coords.y, middleColor([colors[3], colors[0], colors[2]]), stroke);
         } else if (i == "H"){
             processLetter(dirA, lengthA, coords);
             processLetter(dirC, lengthC, coords);
             processLetter(dirTU, lengthTU, coords);
-            drawLine(oldX, oldY, coords.x, coords.y, middleColor([colors[3], colors[0], colors[1]]));
+            drawLine(oldX, oldY, coords.x, coords.y, middleColor([colors[3], colors[0], colors[1]]), stroke);
         } else if (i == "D"){
             processLetter(dirA, lengthA, coords);
             processLetter(dirG, lengthG, coords);
             processLetter(dirTU, lengthTU, coords);
-            drawLine(oldX, oldY, coords.x, coords.y, middleColor([colors[1], colors[2], colors[3]]));
+            drawLine(oldX, oldY, coords.x, coords.y, middleColor([colors[1], colors[2], colors[3]]), stroke);
         } else if (i == "B"){
             processLetter(dirC, lengthC, coords);
             processLetter(dirG, lengthG, coords);
             processLetter(dirTU, lengthTU, coords);
-            drawLine(oldX, oldY, coords.x, coords.y, middleColor([colors[1], colors[2], colors[0]]));
+            drawLine(oldX, oldY, coords.x, coords.y, middleColor([colors[1], colors[2], colors[0]]), stroke);
         } else if (i == "X" || i == "N"){
             processLetter(dirA, lengthA, coords);
             processLetter(dirC, lengthC, coords);
             processLetter(dirG, lengthG, coords);
             processLetter(dirTU, lengthTU, coords);
-            drawLine(oldX, oldY, coords.x, coords.y, middleColor([colors[0], colors[1], colors[2], colors[3]]));
+            drawLine(oldX, oldY, coords.x, coords.y, middleColor([colors[0], colors[1], colors[2], colors[3]]), stroke);
         }
     });
 }
 
-function drawDNK(dnk, coords, color){
+function drawDNK(dnk, coords, color, stroke){
 
     dnk.forEach(function(i){
         var oldX = coords.x;
@@ -478,7 +503,7 @@ function drawDNK(dnk, coords, color){
             processLetter(dirG, lengthG, coords);
             processLetter(dirTU, lengthTU, coords);
         }
-        drawLine(oldX, oldY, coords.x, coords.y, color);
+        drawLine(oldX, oldY, coords.x, coords.y, color, stroke);
     });
 }
 
@@ -504,13 +529,13 @@ function redrawTriander(){
     var coords3 = {x: coords1.x, y: coords1.y};
 
     if (checkboxColors.checked){
-        drawDNKdifferentColors(DNK1, coords1, [triander1C, triander1TU, triander1G, triander1A]);
-        drawDNKdifferentColors(DNK2, coords2, [triander2C, triander2TU, triander2G, triander2A]);
-        drawDNKdifferentColors(DNK3, coords3, [triander3C, triander3TU, triander3G, triander3A]);
+        drawDNKdifferentColors(DNK1, coords1, [triander1C, triander1TU, triander1G, triander1A], strokeBranch1);
+        drawDNKdifferentColors(DNK2, coords2, [triander2C, triander2TU, triander2G, triander2A], strokeBranch2);
+        drawDNKdifferentColors(DNK3, coords3, [triander3C, triander3TU, triander3G, triander3A], strokeBranch3);
     } else {
-        drawDNK(DNK1, coords1, triander1Solid);
-        drawDNK(DNK2, coords2, triander2Solid);
-        drawDNK(DNK3, coords3, triander3Solid);
+        drawDNK(DNK1, coords1, triander1Solid, strokeBranch1);
+        drawDNK(DNK2, coords2, triander2Solid, strokeBranch2);
+        drawDNK(DNK3, coords3, triander3Solid, strokeBranch3);
     }
 
 }
@@ -520,9 +545,9 @@ function redrawMonoander(){
     coords = {x: x, y: y}
     
     if (checkboxColors.checked){
-        drawDNKdifferentColors(DNK, coords, [monoanderC, monoanderTU, monoanderG, monoanderA]);
+        drawDNKdifferentColors(DNK, coords, [monoanderC, monoanderTU, monoanderG, monoanderA], strokeMonoander);
     } else {
-        drawDNK(DNK, coords, monoanderSolid);
+        drawDNK(DNK, coords, monoanderSolid, strokeMonoander);
     }
 }
 
