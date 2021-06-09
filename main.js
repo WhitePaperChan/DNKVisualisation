@@ -85,7 +85,7 @@ let strokeBranch3Input = document.getElementById('strokeBranch3');
     pickerTriander1Solid, pickerTriander1C, pickerTriander1TU, pickerTriander1G, pickerTriander1A, 
     pickerTriander2Solid, pickerTriander2C, pickerTriander2TU, pickerTriander2G, pickerTriander2A, 
     pickerTriander3Solid, pickerTriander3C, pickerTriander3TU, pickerTriander3G, pickerTriander3A
-].forEach(i => i.addEventListener('input', () => redraw()));
+].forEach(i => i.addEventListener('change', () => redraw()));
 
 let importInput = document.getElementById('import');
 

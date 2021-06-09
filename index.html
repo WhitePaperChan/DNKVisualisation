@@ -5,11 +5,17 @@
     <title>DNK Visualisation</title>
   </head>
   <body>
+    <div>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 40" id="canvas"></svg>
+    </div>
+    <div>
     <input type="text" maxlength=100000>
     <label for="import" class="import_button">
       Import
     </label>
     <input type="file" id="import">
+    <input type="button" id="export" value="Export">
+    <br>
     <input type="checkbox" id="triander" name="triander">
     <label for="triander">Triander</label>
     <input type="checkbox" id="colors" name="colors">
@@ -79,11 +85,10 @@
     <input type="number" id="start" name="start" min="1" max="100000">
     End:
     <input type="number" id="end" name="end" min="1" max="100000">
-    <input type="button" id="export" value="Export">
     <br>
-    Colors:
+    <b>Colors:</b>
     <br>
-    Monoandr:
+    <i>Monoander:</i>
     <br>
     <label for="monoanderSolid">Solid:</label>
     <input type="color" id="monoanderSolid" value="#000000">
@@ -96,7 +101,7 @@
     <label for="monoanderA">A:</label>
     <input type="color" id="monoanderA" value="#FFA500">
     <br>
-    Triander:
+    <i>Triander:</i>
     <br>
     Branch1:
     <br>
@@ -137,7 +142,7 @@
     <label for="triander3A">A:</label>
     <input type="color" id="triander3A" value="#FF0000">
     <br>
-    Stroke width:
+    <b>Stroke width:</b>
     <br>
     <label for="strokeMonoander">Monoander:</label>
     <input type="number" id="strokeMonoander" name="strokeMonoander" min="0.01" max="0.1", step="0.01">
@@ -148,7 +153,7 @@
     <label for="strokeBranch3">Branch 3:</label>
     <input type="number" id="strokeBranch3" name="strokeBranch3" min="0.01" max="0.1", step="0.01">
     <br>
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 20" id="canvas"></svg>
+    </div>
     <link rel="stylesheet" href="style.css">
     <script src="main.js"></script>
   </body>
