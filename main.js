@@ -19,7 +19,7 @@ let x = 0;
 let y = svg.getBoundingClientRect().height;
 
 let start = 1;
-let end = 100000;
+let end = 1000;
 
 let monoanderSolid = "#000000"; 
 let monoanderC = "#800080"; 
@@ -95,10 +95,10 @@ importInput.addEventListener("change", () => {
     reader.readAsText(file);
     reader.onload = function() {
         read_result = reader.result;
-        if (read_result.length < 100000){
+        if (read_result.length < 1000){
             input.value = read_result;
         } else {
-            input.value = read_result.slice(0, 100000);
+            input.value = read_result.slice(0, 1000);
         }
         redraw();
     };
