@@ -8,19 +8,7 @@ span[id^="warning"]{
 input[type="file"] {
   display: none;
 }
-.import_button {
-  background-color: lightgray;
-  border: 1px solid gray;
-  display: inline-block;
-  padding: 3px 12px;
-  cursor: pointer;
-  font-family: inherit;
-}
-.import_button:hover {
-  background-color: lightsteelblue;
-  border: 1px solid blue;
-}
-input[type="button"] {
+.button {
   background-color: lightgray;
   border: 1px solid gray;
   display: inline-block;
@@ -29,11 +17,14 @@ input[type="button"] {
   font-size: inherit;
   font-family: inherit;
 }
-input[type="button"]:hover {
+.button:hover {
   background-color: lightsteelblue;
   border: 1px solid blue;
 }
 body {
   display: grid;
   grid-template-columns: 1fr 1fr;
+}
+svg {
+  min-width: 600px;
 }

@@ -1,5 +1,5 @@
 let oneVectorLength = 20;
-var svg = document.getElementById('canvas');
+let svg = document.getElementById('svg-canvas');
 
 let stroke_width = 0.1;
 
@@ -106,13 +106,13 @@ importInput.addEventListener("change", () => {
 
 let exportButton = document.getElementById('export');
 exportButton.addEventListener("click", () => {
-    var svgData = svg.outerHTML;
-    var preface = '<?xml version="1.0" standalone="no"?>\r\n';
-    var svgBlob = new Blob([preface, svgData], {type:"image/svg+xml;charset=utf-8"});
-    var svgUrl = URL.createObjectURL(svgBlob);
-    var downloadLink = document.createElement("a");
+    let svgData = svg.outerHTML;
+    let preface = '<?xml version="1.0" standalone="no"?>\r\n';
+    let svgBlob = new Blob([preface, svgData], {type:"image/svg+xml;charset=utf-8"});
+    let svgUrl = URL.createObjectURL(svgBlob);
+    let downloadLink = document.createElement("a");
     downloadLink.href = svgUrl;
-    downloadLink.download = "name.svg";
+    downloadLink.download = "dnk_rnk_vis.svg";
     document.body.appendChild(downloadLink);
     downloadLink.click();
     document.body.removeChild(downloadLink);
@@ -177,7 +177,7 @@ defaultButton.addEventListener("click", defaultParams);
 function redraw(){
     let invalidInput = false;
     let invalidInputsList = "";
-    var svgRect = svg.getBoundingClientRect();
+    let svgRect = svg.getBoundingClientRect();
     [[zoomNumberInput, "zoom"], [xNumberInput, "x"], [yNumberInput, "y"], 
     [lengthCInput, "C"], [lengthTUInput, "T/U"], [lengthGInput, "G"], [lengthAInput, "A"], 
     [startInput, "start"], [endInput, "end"], 
@@ -273,7 +273,6 @@ function redraw(){
     DNK = DNK.filter(function(value, index, arr){
         return (["A", "C", "T", "U", "G", "M", "R", "W", "S", "Y", "K", "V", "H", "D", "B", "X", "N"].includes(value));
     });
-    var svgRect = svg.getBoundingClientRect();
     drawLine(0, y, svgRect.width * 50, y, "lightgray", stroke_width);
     drawLine(x, 0, x, svgRect.height * 50, "lightgray", stroke_width);
     if (checkboxTriander.checked){
@@ -308,11 +307,11 @@ function middleColor(colors){
 }
 
 function checkSameLetters(){
-    var labels = [dirCLabels, dirTULabels, dirGLabels, dirALabels];
-    var dirs = [dirC, dirTU, dirG, dirA];
-    var letters = ["C", "T/U", "G", "A"]
-    var hasSameLetters = false;
-    var sameLetters = "";
+    let labels = [dirCLabels, dirTULabels, dirGLabels, dirALabels];
+    let dirs = [dirC, dirTU, dirG, dirA];
+    let letters = ["C", "T/U", "G", "A"]
+    let hasSameLetters = false;
+    let sameLetters = "";
     labels.forEach(i => i.forEach(j => j.style.color = "black"));
     for (let i = 0; i < 4; i++){
         for (let j = i+1; j < 4; j++){
@@ -370,20 +369,21 @@ function processLetter(direction, length, coords){
 }
 
 function drawLine(x1, y1, x2, y2, color, stroke){
-    var element = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-    element.setAttributeNS(null, 'x1', x1 / 50);
-    element.setAttributeNS(null, 'y1', y1 / 50);
-    element.setAttributeNS(null, 'x2', x2 / 50);
-    element.setAttributeNS(null, 'y2', y2 / 50);
-    element.setAttributeNS(null, 'stroke', color);
-    element.setAttributeNS(null, 'stroke-width', stroke);
+    let element = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    element.setAttribute('x1', x1 / 50);
+    element.setAttribute('y1', y1 / 50);
+    element.setAttribute('x2', x2 / 50);
+    element.setAttribute('y2', y2 / 50);
+    element.setAttribute('stroke', color);
+    element.setAttribute('stroke-width', stroke);
+    element.setAttribute('stroke-linecap', 'round')
     svg.appendChild(element);
 }
 
 function drawDNKdifferentColors(dnk, coords, colors, stroke){
     dnk.forEach(function(i){
-        var oldX = coords.x;
-        var oldY = coords.y;
+        let oldX = coords.x;
+        let oldY = coords.y;
         if (i == "C"){
             processLetter(dirC, lengthC, coords);
             drawLine(oldX, oldY, coords.x, coords.y, colors[0], stroke);
@@ -453,8 +453,8 @@ function drawDNKdifferentColors(dnk, coords, colors, stroke){
 function drawDNK(dnk, coords, color, stroke){
 
     dnk.forEach(function(i){
-        var oldX = coords.x;
-        var oldY = coords.y;
+        let oldX = coords.x;
+        let oldY = coords.y;
         if (i == "C"){
             processLetter(dirC, lengthC, coords);
         } else if (i == "T" || i == "U"){
@@ -524,9 +524,9 @@ function redrawTriander(){
         }
     }
 
-    var coords1 = {x: x, y: y};
-    var coords2 = {x: coords1.x, y: coords1.y};
-    var coords3 = {x: coords1.x, y: coords1.y};
+    let coords1 = {x: x, y: y};
+    let coords2 = {x: coords1.x, y: coords1.y};
+    let coords3 = {x: coords1.x, y: coords1.y};
 
     if (checkboxColors.checked){
         drawDNKdifferentColors(DNK1, coords1, [triander1C, triander1TU, triander1G, triander1A], strokeBranch1);
