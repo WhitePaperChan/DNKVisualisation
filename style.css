@@ -30,3 +30,6 @@ body {
 svg {
   min-width: 600px;
 }
+div {
+  padding: 2px;
+}
