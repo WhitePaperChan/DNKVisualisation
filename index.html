@@ -6,7 +6,7 @@
   </head>
   <body>
     <div>
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 40" id="svg-canvas"></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 40" id="triander"></svg>
     </div>
     <div>
     <input type="text" maxlength=1000>
@@ -16,31 +16,42 @@
     <input type="file" id="import">
     <input type="button" id="export" value="Export" class="button">
     <br>
+
     <input type="checkbox" id="triander" name="triander">
     <label for="triander">Triander</label>
     <input type="checkbox" id="colors" name="colors">
     <label for="colors">Different colors for letters</label>
+    <span id="warningSettings"></span>
     <span id="warningSize"></span>
     <span id="warningLetters"></span>
     <br>
+
     <label for="zoom">Zoom</label>
-    <input type="number" id="zoom" name="zoom" min="10" max="100">
+    <input type="number" id="zoom" name="zoom" min="10" max="100" value="20">
     <br>
+
     <label for="x">x</label>
-    <input type="number" id="x" name="x" min="-1000" max="1000">
+    <input type="number" id="x" name="x" min="-1000" max="1000" value="0">
     <label for="y">y</label>
-    <input type="number" id="y" name="y" min="-1000" max="1000">
+    <input type="number" id="y" name="y" min="-1000" max="1000" value="0">
     <br>
+
     <label for="lengthC">C</label>
-    <input type="number" id="lengthC" name="lengthC" min="1" max="10">
+    <input type="number" id="lengthC" name="lengthC" min="1" max="10" value="4">
     <label for="lengthTU">T/U</label>
-    <input type="number" id="lengthTU" name="lengthTU" min="1" max="10">
+    <input type="number" id="lengthTU" name="lengthTU" min="1" max="10" value="2">
     <label for="lengthG">G</label>
-    <input type="number" id="lengthG" name="lengthG" min="1" max="10">
+    <input type="number" id="lengthG" name="lengthG" min="1" max="10" value="3">
     <label for="lengthA">A</label>
-    <input type="number" id="lengthA" name="lengthA" min="1" max="10">
+    <input type="number" id="lengthA" name="lengthA" min="1" max="10" value="1">
     <input type="button" id="defaultButton" value="Default" class="button">
+    <input type="button" id="saveSettings" value="Save settings" class="button">
+    <label for="loadSettings" class="button">
+      Load settings
+    </label>
+    <input type="file" id="loadSettings">
     <br>
+
     C:
     <input type="radio" id="directionC1" name="directionC" value="right">
     <label for="directionC1">➔</label>
@@ -51,6 +62,7 @@
     <input type="radio" id="directionC4" name="directionC" value="down">
     <label for="directionC4">🠗</label>
     <br>
+
     T/U:
     <input type="radio" id="directionTU1" name="directionTU" value="right" checked>
     <label for="directionTU1">➔</label>
@@ -61,6 +73,7 @@
     <input type="radio" id="directionTU4" name="directionTU" value="down">
     <label for="directionTU4">🠗</label>
     <br>
+
     G:
     <input type="radio" id="directionG1" name="directionG" value="right">
     <label for="directionG1">➔</label>
@@ -71,6 +84,7 @@
     <input type="radio" id="directionG4" name="directionG" value="down" checked>
     <label for="directionG4">🠗</label>
     <br>
+
     A:
     <input type="radio" id="directionA1" name="directionA" value="right">
     <label for="directionA1">➔</label>
@@ -81,10 +95,11 @@
     <input type="radio" id="directionA4" name="directionA" value="down">
     <label for="directionA4">🠗</label>
     <br>
+
     Start:
-    <input type="number" id="start" name="start" min="1" max="100000">
+    <input type="number" id="start" name="start" min="1" max="100000" value="1">
     End:
-    <input type="number" id="end" name="end" min="1" max="100000">
+    <input type="number" id="end" name="end" min="1" max="100000" value="1000">
     <br>
     <b>Colors:</b>
     <br>
@@ -101,10 +116,13 @@
     <label for="monoanderA">A:</label>
     <input type="color" id="monoanderA" value="#FFA500">
     <br>
+
     <i>Triander:</i>
     <br>
+
     Branch1:
     <br>
+    
     <label for="triander1Solid">Solid:</label>
     <input type="color" id="triander1Solid" value="#0000FF">
     <label for="triander1C">C:</label>
@@ -116,8 +134,10 @@
     <label for="triander1A">A:</label>
     <input type="color" id="triander1A" value="#FFA500">
     <br>
+    
     Branch2:
     <br>
+    
     <label for="triander2Solid">Solid:</label>
     <input type="color" id="triander2Solid" value="#008000">
     <label for="triander2C">C:</label>
@@ -129,8 +149,10 @@
     <label for="triander2A">A:</label>
     <input type="color" id="triander2A" value="#FF4500">
     <br>
+    
     Branch3:
     <br>
+    
     <label for="triander3Solid">Solid:</label>
     <input type="color" id="triander3Solid" value="#FF0000">
     <label for="triander3C">C:</label>
@@ -142,18 +164,22 @@
     <label for="triander3A">A:</label>
     <input type="color" id="triander3A" value="#FF0000">
     <br>
+    
     <b>Stroke width:</b>
     <br>
+    
     <label for="strokeMonoander">Monoander:</label>
-    <input type="number" id="strokeMonoander" name="strokeMonoander" min="0.01" max="1", step="0.01">
+    <input type="number" id="strokeMonoander" name="strokeMonoander" min="0.01" max="1", step="0.01" value="0.1">
     <br>
+    
     <label for="strokeBranch1">Branch 1:</label>
-    <input type="number" id="strokeBranch1" name="strokeBranch1" min="0.01" max="1", step="0.01">
+    <input type="number" id="strokeBranch1" name="strokeBranch1" min="0.01" max="1", step="0.01" value="0.1">
     <label for="strokeBranch2">Branch 2:</label>
-    <input type="number" id="strokeBranch2" name="strokeBranch2" min="0.01" max="1", step="0.01">
+    <input type="number" id="strokeBranch2" name="strokeBranch2" min="0.01" max="1", step="0.01" value="0.1">
     <label for="strokeBranch3">Branch 3:</label>
-    <input type="number" id="strokeBranch3" name="strokeBranch3" min="0.01" max="1", step="0.01">
+    <input type="number" id="strokeBranch3" name="strokeBranch3" min="0.01" max="1", step="0.01" value="0.1">
     <br>
+    
     </div>
     <link rel="stylesheet" href="style.css">
     <script src="main.js"></script>

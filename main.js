@@ -1,5 +1,5 @@
 let oneVectorLength = 20;
-let svg = document.getElementById('svg-canvas');
+let svg = document.getElementById('triander');
 
 let stroke_width = 0.1;
 
@@ -105,6 +105,7 @@ importInput.addEventListener("change", () => {
 });
 
 let exportButton = document.getElementById('export');
+
 exportButton.addEventListener("click", () => {
     let svgData = svg.outerHTML;
     let preface = '<?xml version="1.0" standalone="no"?>\r\n';
@@ -113,6 +114,108 @@ exportButton.addEventListener("click", () => {
     let downloadLink = document.createElement("a");
     downloadLink.href = svgUrl;
     downloadLink.download = "dnk_rnk_vis.svg";
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
+});
+
+let loadSettings = document.getElementById('loadSettings');
+let warningSettings = document.getElementById('warningSettings');
+
+loadSettings.addEventListener("change", () => {
+    let file = loadSettings.files[0];
+    let reader = new FileReader();
+    reader.readAsText(file);
+    reader.onload = function() {
+        read_result = reader.result;
+        let settings;
+        try {
+            settings = JSON.parse(read_result);
+            warningSettings.textContent = "";
+        } catch (error) {
+            warningSettings.textContent = "Settings file can't be used";
+        }
+        let intValues = [
+            {"setting": settings.oneVectorLength, "input": zoomNumberInput}, 
+            {"setting": settings.lengthC, "input": lengthCInput}, 
+            {"setting": settings.lengthTU, "input": lengthTUInput}, 
+            {"setting": settings.lengthG, "input": lengthGInput}, 
+            {"setting": settings.lengthA, "input": lengthAInput}, 
+            {"setting": settings.start, "input": startInput}, 
+            {"setting": settings.end, "input": endInput}];
+        let floatValues = [
+            {"setting": settings.strokeMonoander, "input": strokeMonoanderInput}, 
+            {"setting": settings.strokeBranch1, "input": strokeBranch1Input}, 
+            {"setting": settings.strokeBranch2, "input": strokeBranch2Input}, 
+            {"setting": settings.strokeBranch3, "input": strokeBranch3Input}];
+        let colorValues = [
+            {"setting": settings.monoanderSolid, "input": pickerMonoanderSolid}, 
+            {"setting": settings.monoanderC, "input": pickerMonoanderC}, 
+            {"setting": settings.monoanderTU, "input": pickerMonoanderTU}, 
+            {"setting": settings.monoanderG, "input": pickerMonoanderG}, 
+            {"setting": settings.monoanderA, "input": pickerMonoanderA}, 
+            {"setting": settings.triander1Solid, "input": pickerTriander1Solid}, 
+            {"setting": settings.triander1C, "input": pickerTriander1C}, 
+            {"setting": settings.triander1TU, "input": pickerTriander1TU}, 
+            {"setting": settings.triander1G, "input": pickerTriander1G}, 
+            {"setting": settings.triander1A, "input": pickerTriander1A}, 
+            {"setting": settings.triander2Solid, "input": pickerTriander2Solid}, 
+            {"setting": settings.triander2C, "input": pickerTriander2C}, 
+            {"setting": settings.triander2TU, "input": pickerTriander2TU}, 
+            {"setting": settings.triander2G, "input": pickerTriander2G}, 
+            {"setting": settings.triander2A, "input": pickerTriander2A}, 
+            {"setting": settings.triander3Solid, "input": pickerTriander3Solid}, 
+            {"setting": settings.triander3C, "input": pickerTriander3C}, 
+            {"setting": settings.triander3TU, "input": pickerTriander3TU}, 
+            {"setting": settings.triander3G, "input": pickerTriander3G}, 
+            {"setting": settings.triander3A, "input": pickerTriander3A}]
+        if (settings != undefined){
+            intValues.forEach(i => {
+                if (i.setting != undefined){
+                    i.input.value = Number.parseInt(i.setting) || i.input.value;
+                    redraw();
+                }
+            })
+            floatValues.forEach(i => {
+                if (i.setting != undefined){
+                    i.input.value = Number.parseFloat(i.setting) || i.input.value;
+                    redraw();
+                }
+            })
+            colorValues.forEach(i => {
+                if (i.setting != undefined && 
+                    i.setting[0] == "#" && 
+                    Number.parseInt(i.setting.substr(1, 2), 16) != NaN &&
+                    Number.parseInt(i.setting.substr(3, 2), 16) != NaN &&
+                    Number.parseInt(i.setting.substr(5, 2), 16) != NaN){
+                        i.input.value = i.setting;
+                        redraw();
+                    }
+            })
+        }
+    };
+});
+
+let saveSetings = document.getElementById('saveSettings');
+
+saveSetings.addEventListener("click", () => {
+    let settingsJson = {
+        "oneVectorLength": oneVectorLength,
+        "lengthC": lengthC, "lengthTU": lengthTU, "lengthG": lengthG, "lengthA": lengthA,
+        "dirC": dirC, "dirTU": dirTU, "dirG": dirG, "dirA": dirA,
+        "start": start,
+        "end": end,
+        "monoanderSolid": monoanderSolid, "monoanderC": monoanderC, "monoanderTU": monoanderTU, "monoanderG": monoanderG, "monoanderA": monoanderA,
+        "triander1Solid": triander1Solid, "triander1C": triander1C, "triander1TU": triander1TU, "triander1G": triander1G, "triander1A": triander1A,
+        "triander2Solid": triander2Solid, "triander2C": triander2C, "triander2TU": triander2TU, "triander2G": triander2G, "triander2A": triander2A,
+        "triander3Solid": triander3Solid, "triander3C": triander3C, "triander3TU": triander3TU, "triander3G": triander3G, "triander3A": triander3A,
+        "strokeMonoander": strokeMonoander, "strokeBranch1": strokeBranch1, "strokeBranch2": strokeBranch2, "strokeBranch3": strokeBranch3
+    };
+    let settingsString = JSON.stringify(settingsJson);
+    let dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(settingsString);
+    let downloadLink = document.createElement("a");
+    downloadLink.href = dataUri;
+    downloadLink.download = "settings.json";
     document.body.appendChild(downloadLink);
     downloadLink.click();
     document.body.removeChild(downloadLink);
