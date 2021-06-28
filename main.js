@@ -1,9 +1,10 @@
 let oneVectorLength = 20;
 let svg = document.getElementById('triander');
 
-let stroke_width = 0.1;
+let stroke_width = 1;
 
-let input = document.querySelector('input');
+//let input = document.querySelector('input');
+let input = document.getElementById('sequence');
 
 let lengthC = 4;
 let lengthTU = 2;
@@ -95,10 +96,10 @@ importInput.addEventListener("change", () => {
     reader.readAsText(file);
     reader.onload = function() {
         read_result = reader.result;
-        if (read_result.length < 1000){
+        if (read_result.length < 100000){
             input.value = read_result;
         } else {
-            input.value = read_result.slice(0, 1000);
+            input.value = read_result.slice(0, 100000);
         }
         redraw();
     };
@@ -169,17 +170,21 @@ loadSettings.addEventListener("change", () => {
             {"setting": settings.triander3TU, "input": pickerTriander3TU}, 
             {"setting": settings.triander3G, "input": pickerTriander3G}, 
             {"setting": settings.triander3A, "input": pickerTriander3A}]
+        let dirValues = [
+            {"setting": settings.dirC, "input": dirCRadio}, 
+            {"setting": settings.dirTU, "input": dirTURadio},
+            {"setting": settings.dirG, "input": dirGRadio},
+            {"setting": settings.dirA, "input": dirARadio}
+        ]
         if (settings != undefined){
             intValues.forEach(i => {
                 if (i.setting != undefined){
                     i.input.value = Number.parseInt(i.setting) || i.input.value;
-                    redraw();
                 }
             })
             floatValues.forEach(i => {
                 if (i.setting != undefined){
                     i.input.value = Number.parseFloat(i.setting) || i.input.value;
-                    redraw();
                 }
             })
             colorValues.forEach(i => {
@@ -189,9 +194,36 @@ loadSettings.addEventListener("change", () => {
                     Number.parseInt(i.setting.substr(3, 2), 16) != NaN &&
                     Number.parseInt(i.setting.substr(5, 2), 16) != NaN){
                         i.input.value = i.setting;
-                        redraw();
                     }
             })
+            dirValues.forEach(i => {
+                if (i.setting == "right"){
+                    i.input[0].checked = true;
+                    i.input[1].checked = false;
+                    i.input[2].checked = false;
+                    i.input[3].checked = false;
+                }
+                if (i.setting == "left"){
+                    i.input[0].checked = false;
+                    i.input[1].checked = true;
+                    i.input[2].checked = false;
+                    i.input[3].checked = false;
+                }
+                if (i.setting == "up"){
+                    i.input[0].checked = false;
+                    i.input[1].checked = false;
+                    i.input[2].checked = true;
+                    i.input[3].checked = false;
+                }
+                if (i.setting == "down"){
+                    i.input[0].checked = false;
+                    i.input[1].checked = false;
+                    i.input[2].checked = false;
+                    i.input[3].checked = true;
+                }
+            })
+            redraw();
+            checkSameLetters();
         }
     };
 });
@@ -473,13 +505,14 @@ function processLetter(direction, length, coords){
 
 function drawLine(x1, y1, x2, y2, color, stroke){
     let element = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-    element.setAttribute('x1', x1 / 50);
-    element.setAttribute('y1', y1 / 50);
-    element.setAttribute('x2', x2 / 50);
-    element.setAttribute('y2', y2 / 50);
+    element.setAttribute('x1', x1 / 5);
+    element.setAttribute('y1', y1 / 5);
+    element.setAttribute('x2', x2 / 5);
+    element.setAttribute('y2', y2 / 5);
     element.setAttribute('stroke', color);
     element.setAttribute('stroke-width', stroke);
-    element.setAttribute('stroke-linecap', 'round')
+    element.setAttribute('stroke-linecap', 'round');
+    element.setAttribute('vector-effect', 'non-scaling-stroke');
     svg.appendChild(element);
 }
 
