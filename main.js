@@ -403,6 +403,10 @@ function redraw(){
     DNK = DNK.toUpperCase();
     svg.innerHTML = "";
 
+    if (DNK[0] == ">"){
+        DNK = DNK.slice(DNK.indexOf('\n') + 1, DNK.length - DNK.indexOf('\n') - 1);
+    }
+
     DNK = DNK.slice(start - 1, end)
     DNK = DNK.split('');
     DNK = DNK.filter(function(value, index, arr){
@@ -504,16 +508,19 @@ function processLetter(direction, length, coords){
 }
 
 function drawLine(x1, y1, x2, y2, color, stroke){
-    let element = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-    element.setAttribute('x1', x1 / 5);
-    element.setAttribute('y1', y1 / 5);
-    element.setAttribute('x2', x2 / 5);
-    element.setAttribute('y2', y2 / 5);
-    element.setAttribute('stroke', color);
-    element.setAttribute('stroke-width', stroke);
-    element.setAttribute('stroke-linecap', 'round');
-    element.setAttribute('vector-effect', 'non-scaling-stroke');
-    svg.appendChild(element);
+    let rect = svg.getBoundingClientRect();
+    if (((x1 >= 0 && x1 <= rect.width * 5) || (x2 >= 0 && x2 <= rect.width * 5)) && (y1 >= 0 || y2 >= 0)){
+        let element = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        element.setAttribute('x1', x1 / 5);
+        element.setAttribute('y1', y1 / 5);
+        element.setAttribute('x2', x2 / 5);
+        element.setAttribute('y2', y2 / 5);
+        element.setAttribute('stroke', color);
+        element.setAttribute('stroke-width', stroke);
+        element.setAttribute('stroke-linecap', 'round');
+        element.setAttribute('vector-effect', 'non-scaling-stroke');
+        svg.appendChild(element);
+    }
 }
 
 function drawDNKdifferentColors(dnk, coords, colors, stroke){

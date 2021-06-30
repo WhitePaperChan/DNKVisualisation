@@ -10,6 +10,9 @@ span[id^="warning"]{
 input[type="file"] {
   display: none;
 }
+input[type="number"]{
+  width: 5em;
+}
 textarea {
   width: 100%;
 }
