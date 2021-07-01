@@ -523,81 +523,154 @@ function drawLine(x1, y1, x2, y2, color, stroke){
     }
 }
 
+function drawPath(path, color, stroke){
+    let element = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    element.setAttribute('d', path);
+    element.setAttribute('stroke', color);
+    element.setAttribute('stroke-width', stroke);
+    element.setAttribute('stroke-linecap', 'round');
+    element.setAttribute('vector-effect', 'non-scaling-stroke');
+    svg.appendChild(element);
+}
+
 function drawDNKdifferentColors(dnk, coords, colors, stroke){
+    let pathC = "";
+    let pathTU = "";
+    let pathG = "";
+    let pathA = "";
+    let pathM = "";
+    let pathR = "";
+    let pathW = "";
+    let pathS = "";
+    let pathY = "";
+    let pathK = "";
+    let pathV = "";
+    let pathH = "";
+    let pathD = "";
+    let pathB = "";
+    let pathXN = "";
     dnk.forEach(function(i){
         let oldX = coords.x;
         let oldY = coords.y;
         if (i == "C"){
             processLetter(dirC, lengthC, coords);
-            drawLine(oldX, oldY, coords.x, coords.y, colors[0], stroke);
+            pathC += 'M ' + oldX / 5 + ', ' + oldY / 5 + '\n L' + coords.x / 5 + ', ' + coords.y / 5 + '\n';
+            //drawLine(oldX, oldY, coords.x, coords.y, colors[0], stroke);
         } else if (i == "T" || i == "U"){
             processLetter(dirTU, lengthTU, coords);
-            drawLine(oldX, oldY, coords.x, coords.y, colors[1], stroke);
+            pathTU += 'M ' + oldX / 5 + ', ' + oldY / 5 + '\n L' + coords.x / 5 + ', ' + coords.y / 5 + '\n';
+            //drawLine(oldX, oldY, coords.x, coords.y, colors[1], stroke);
         } else if (i == "G"){
             processLetter(dirG, lengthG, coords);
-            drawLine(oldX, oldY, coords.x, coords.y, colors[2], stroke);
+            pathG += 'M ' + oldX / 5 + ', ' + oldY / 5 + '\n L' + coords.x / 5 + ', ' + coords.y / 5 + '\n';
+            //drawLine(oldX, oldY, coords.x, coords.y, colors[2], stroke);
         } else if (i == "A"){
             processLetter(dirA, lengthA, coords);
-            drawLine(oldX, oldY, coords.x, coords.y, colors[3], stroke);
+            pathA += 'M ' + oldX / 5 + ', ' + oldY / 5 + '\n L' + coords.x / 5 + ', ' + coords.y / 5 + '\n';
+            //drawLine(oldX, oldY, coords.x, coords.y, colors[3], stroke);
         } else if (i == "M"){
             processLetter(dirA, lengthA, coords);
             processLetter(dirC, lengthC, coords);
-            drawLine(oldX, oldY, coords.x, coords.y, middleColor([colors[3], colors[0]]), stroke);
+            pathM += 'M ' + oldX / 5 + ', ' + oldY / 5 + '\n L' + coords.x / 5 + ', ' + coords.y / 5 + '\n';
+            //drawLine(oldX, oldY, coords.x, coords.y, middleColor([colors[3], colors[0]]), stroke);
         } else if (i == "R"){
             processLetter(dirA, lengthA, coords);
             processLetter(dirG, lengthG, coords);
-            drawLine(oldX, oldY, coords.x, coords.y, middleColor([colors[3], colors[2]]), stroke);
+            pathR += 'M ' + oldX / 5 + ', ' + oldY / 5 + '\n L' + coords.x / 5 + ', ' + coords.y / 5 + '\n';
+            //drawLine(oldX, oldY, coords.x, coords.y, middleColor([colors[3], colors[2]]), stroke);
         } else if (i == "W"){
             processLetter(dirA, lengthA, coords);
             processLetter(dirTU, lengthTU, coords);
-            drawLine(oldX, oldY, coords.x, coords.y, middleColor([colors[3], colors[1]]), stroke);
+            pathW += 'M ' + oldX / 5 + ', ' + oldY / 5 + '\n L' + coords.x / 5 + ', ' + coords.y / 5 + '\n';
+            //drawLine(oldX, oldY, coords.x, coords.y, middleColor([colors[3], colors[1]]), stroke);
         } else if (i == "S"){
             processLetter(dirC, lengthC, coords);
             processLetter(dirG, lengthG, coords);
-            drawLine(oldX, oldY, coords.x, coords.y, middleColor([colors[0], colors[2]]), stroke);
+            pathS += 'M ' + oldX / 5 + ', ' + oldY / 5 + '\n L' + coords.x / 5 + ', ' + coords.y / 5 + '\n';
+            //drawLine(oldX, oldY, coords.x, coords.y, middleColor([colors[0], colors[2]]), stroke);
         } else if (i == "Y"){
             processLetter(dirC, lengthC, coords);
             processLetter(dirTU, lengthTU, coords);
-            drawLine(oldX, oldY, coords.x, coords.y, middleColor([colors[0], colors[1]]), stroke);
+            pathY += 'M ' + oldX / 5 + ', ' + oldY / 5 + '\n L' + coords.x / 5 + ', ' + coords.y / 5 + '\n';
+            //drawLine(oldX, oldY, coords.x, coords.y, middleColor([colors[0], colors[1]]), stroke);
         } else if (i == "K"){
             processLetter(dirG, lengthG, coords);
             processLetter(dirTU, lengthTU, coords);
-            drawLine(oldX, oldY, coords.x, coords.y, middleColor([colors[2], colors[1]]), stroke);
+            pathK += 'M ' + oldX / 5 + ', ' + oldY / 5 + '\n L' + coords.x / 5 + ', ' + coords.y / 5 + '\n';
+            //drawLine(oldX, oldY, coords.x, coords.y, middleColor([colors[2], colors[1]]), stroke);
         } else if (i == "V"){
             processLetter(dirA, lengthA, coords);
             processLetter(dirC, lengthC, coords);
             processLetter(dirG, lengthG, coords);
-            drawLine(oldX, oldY, coords.x, coords.y, middleColor([colors[3], colors[0], colors[2]]), stroke);
+            pathV += 'M ' + oldX / 5 + ', ' + oldY / 5 + '\n L' + coords.x / 5 + ', ' + coords.y / 5 + '\n';
+            //drawLine(oldX, oldY, coords.x, coords.y, middleColor([colors[3], colors[0], colors[2]]), stroke);
         } else if (i == "H"){
             processLetter(dirA, lengthA, coords);
             processLetter(dirC, lengthC, coords);
             processLetter(dirTU, lengthTU, coords);
-            drawLine(oldX, oldY, coords.x, coords.y, middleColor([colors[3], colors[0], colors[1]]), stroke);
+            pathH += 'M ' + oldX / 5 + ', ' + oldY / 5 + '\n L' + coords.x / 5 + ', ' + coords.y / 5 + '\n';
+            //drawLine(oldX, oldY, coords.x, coords.y, middleColor([colors[3], colors[0], colors[1]]), stroke);
         } else if (i == "D"){
             processLetter(dirA, lengthA, coords);
             processLetter(dirG, lengthG, coords);
             processLetter(dirTU, lengthTU, coords);
-            drawLine(oldX, oldY, coords.x, coords.y, middleColor([colors[1], colors[2], colors[3]]), stroke);
+            pathD += 'M ' + oldX / 5 + ', ' + oldY / 5 + '\n L' + coords.x / 5 + ', ' + coords.y / 5 + '\n';
+            //drawLine(oldX, oldY, coords.x, coords.y, middleColor([colors[1], colors[2], colors[3]]), stroke);
         } else if (i == "B"){
             processLetter(dirC, lengthC, coords);
             processLetter(dirG, lengthG, coords);
             processLetter(dirTU, lengthTU, coords);
-            drawLine(oldX, oldY, coords.x, coords.y, middleColor([colors[1], colors[2], colors[0]]), stroke);
+            pathB += 'M ' + oldX / 5 + ', ' + oldY / 5 + '\n L' + coords.x / 5 + ', ' + coords.y / 5 + '\n';
+            //drawLine(oldX, oldY, coords.x, coords.y, middleColor([colors[1], colors[2], colors[0]]), stroke);
         } else if (i == "X" || i == "N"){
             processLetter(dirA, lengthA, coords);
             processLetter(dirC, lengthC, coords);
             processLetter(dirG, lengthG, coords);
             processLetter(dirTU, lengthTU, coords);
-            drawLine(oldX, oldY, coords.x, coords.y, middleColor([colors[0], colors[1], colors[2], colors[3]]), stroke);
+            pathXN += 'M ' + oldX / 5 + ', ' + oldY / 5 + '\n L' + coords.x / 5 + ', ' + coords.y / 5 + '\n';
+            //drawLine(oldX, oldY, coords.x, coords.y, middleColor([colors[0], colors[1], colors[2], colors[3]]), stroke);
         }
     });
+    pathC += "z";
+    pathTU += "z";
+    pathG += "z";
+    pathA += "z";
+    pathM += "z";
+    pathR += "z";
+    pathW += "z";
+    pathS += "z";
+    pathY += "z";
+    pathK += "z";
+    pathV += "z";
+    pathH += "z";
+    pathD += "z";
+    pathB += "z";
+    pathXN += "z";
+    drawPath(pathC, colors[0], stroke);
+    drawPath(pathTU, colors[1], stroke);
+    drawPath(pathG, colors[2], stroke);
+    drawPath(pathA, colors[3], stroke);
+    drawPath(pathM, middleColor([colors[3], colors[0]]), stroke);
+    drawPath(pathR, middleColor([colors[3], colors[2]]), stroke);
+    drawPath(pathW, middleColor([colors[3], colors[1]]), stroke);
+    drawPath(pathS, middleColor([colors[0], colors[2]]), stroke);
+    drawPath(pathY, middleColor([colors[0], colors[1]]), stroke);
+    drawPath(pathK, middleColor([colors[2], colors[1]]), stroke);
+    drawPath(pathV, middleColor([colors[3], colors[0], colors[2]]), stroke);
+    drawPath(pathH, middleColor([colors[3], colors[0], colors[1]]), stroke);
+    drawPath(pathD, middleColor([colors[1], colors[2], colors[3]]), stroke);
+    drawPath(pathB, middleColor([colors[1], colors[2], colors[0]]), stroke);
+    drawPath(pathXN, middleColor([colors[0], colors[1], colors[2], colors[3]]), stroke);
 }
 
 function drawDNK(dnk, coords, color, stroke){
 
+    let path = "";
+
     dnk.forEach(function(i){
         let oldX = coords.x;
         let oldY = coords.y;
+        
         if (i == "C"){
             processLetter(dirC, lengthC, coords);
         } else if (i == "T" || i == "U"){
@@ -646,8 +719,11 @@ function drawDNK(dnk, coords, color, stroke){
             processLetter(dirG, lengthG, coords);
             processLetter(dirTU, lengthTU, coords);
         }
-        drawLine(oldX, oldY, coords.x, coords.y, color, stroke);
+        path += 'M ' + oldX / 5 + ', ' + oldY / 5 + '\n L' + coords.x / 5 + ', ' + coords.y / 5 + '\n';
+        //drawLine(oldX, oldY, coords.x, coords.y, color, stroke);
     });
+    path += 'z';
+    drawPath(path, color, stroke);
 }
 
 function redrawTriander(){
