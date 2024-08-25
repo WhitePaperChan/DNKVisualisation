@@ -3,7 +3,6 @@ let svg = document.getElementById('triander');
 
 let stroke_width = 1;
 
-//let input = document.querySelector('input');
 let input = document.getElementById('sequence');
 
 let lengthC = 4;
@@ -93,6 +92,7 @@ let importInput = document.getElementById('import');
 importInput.addEventListener("change", () => {
     let file = document.getElementById('import').files[0];
     let reader = new FileReader();
+    let format = file.name.slice(file.name.lastIndexOf(".") + 1);
     reader.readAsText(file);
     reader.onload = function() {
         read_result = reader.result;
@@ -101,9 +101,31 @@ importInput.addEventListener("change", () => {
         } else {
             input.value = read_result.slice(0, 100000);
         }
+        if (format == "gb"){
+            input.value = parseGenbank(input.value)
+        } else {
+            input.value = parseFasta(input.value, 0)
+        }
         redraw();
     };
 });
+
+function parseGenbank(text){
+    let reg = /(?<=ORIGIN).*(?=\/\/)/gms;
+    text = text.match(reg)[0];
+    reg = /[gatcuGATCU]/gm;
+    text = text.match(reg).join("");
+    return text;
+}
+
+function parseFasta(text, id){
+    let reg = />.*/ig;
+    let sequences = text.split(reg).filter(function(value){return value != ''});
+    sequences[0] = sequences[0].replaceAll('\r', '');
+    sequences[0] = sequences[0].replaceAll('\n', '');
+    sequences[0] = sequences[0].replaceAll(' ', '');
+    return sequences[0];
+}
 
 let exportButton = document.getElementById('export');
 
